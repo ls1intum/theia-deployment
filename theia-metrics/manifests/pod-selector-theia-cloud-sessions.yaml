@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: theiacloud-sessions
+  # Install in namespace of the prometheus stack.
+  # Otherwise, prometheus config needs to be adapted to look in other namespaces
+  namespace: theia-prometheus-stack
+spec:
+  selector:
+    matchExpressions:
+      - key: app
+        operator: NotIn
+        values:
+          - conversion-webhook
+          - landing-page
+          - operator
+          - service
+  namespaceSelector:
+    matchNames:
+      - theia-prod
+  podMetricsEndpoints:
+    - port: application
+      interval: 15s

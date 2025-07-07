@@ -1,0 +1,21 @@
+apps:
+  - name: java-17-latest
+    image: ghcr.io/ls1intum/theia/java-17:latest
+    requestsMemory: 2000M
+    requestsCpu: 500m
+    limitsMemory: 2400M
+
+  - name: c-latest
+    image: ghcr.io/ls1intum/theia/c:latest
+
+  - name: javascript-latest
+    image: ghcr.io/ls1intum/theia/javascript:latest
+
+  - name: ocaml-latest
+    image: ghcr.io/ls1intum/theia/ocaml:latest
+
+  - name: python-latest
+    image: ghcr.io/ls1intum/theia/python:latest
+
+  - name: rust-latest
+    image: ghcr.io/ls1intum/theia/rust:latest

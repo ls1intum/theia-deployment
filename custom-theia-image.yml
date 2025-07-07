@@ -1,0 +1,184 @@
+apiVersion: theia.cloud/v1beta10
+kind: AppDefinition
+metadata:
+  name: java-17-latest
+spec:
+  name: java-17-latest
+  image: ghcr.io/ls1intum/theia/java-17:latest
+  uid: 101
+  port: 3000
+  ingressname: theia-cloud-demo-ws-ingress
+  ingressHostnamePrefixes:
+    - "*.webview."
+  minInstances: 2
+  maxInstances: 10
+  requestsMemory: 2000M
+  requestsCpu: 500m
+  limitsMemory: 2400M
+  limitsCpu: "2"
+  imagePullPolicy: IfNotPresent
+  downlinkLimit: 30000
+  uplinkLimit: 30000
+  mountPath: /home/project/persisted
+  monitor:
+    port: 3000
+    activityTracker:
+      timeoutAfter:
+        20
+      notifyAfter:
+        15
+
+---
+apiVersion: theia.cloud/v1beta10
+kind: AppDefinition
+metadata:
+  name: c-latest
+spec:
+  name: c-latest
+  image: ghcr.io/ls1intum/theia/c:latest
+  uid: 101
+  port: 3000
+  ingressname: theia-cloud-demo-ws-ingress
+  ingressHostnamePrefixes:
+    - "*.webview."
+  minInstances: 3
+  maxInstances: 10
+  requestsMemory: 1000M
+  requestsCpu: 100m
+  limitsMemory: 1200M
+  limitsCpu: "2"
+  imagePullPolicy: IfNotPresent
+  downlinkLimit: 30000
+  uplinkLimit: 30000
+  mountPath: /home/project/persisted
+  monitor:
+    port: 3000
+    activityTracker:
+      timeoutAfter:
+        20
+      notifyAfter:
+        15
+
+---
+apiVersion: theia.cloud/v1beta10
+kind: AppDefinition
+metadata:
+  name: javascript-latest
+spec:
+  name: javascript-latest
+  image: ghcr.io/ls1intum/theia/javascript:latest
+  uid: 101
+  port: 3000
+  ingressname: theia-cloud-demo-ws-ingress
+  ingressHostnamePrefixes:
+    - "*.webview."
+  minInstances: 3
+  maxInstances: 10
+  requestsMemory: 1000M
+  requestsCpu: 100m
+  limitsMemory: 1200M
+  limitsCpu: "2"
+  imagePullPolicy: IfNotPresent
+  downlinkLimit: 30000
+  uplinkLimit: 30000
+  mountPath: /home/project/persisted
+  monitor:
+    port: 3000
+    activityTracker:
+      timeoutAfter:
+        20
+      notifyAfter:
+        15
+
+---
+apiVersion: theia.cloud/v1beta10
+kind: AppDefinition
+metadata:
+  name: ocaml-latest
+spec:
+  name: ocaml-latest
+  image: ghcr.io/ls1intum/theia/ocaml:latest
+  uid: 101
+  port: 3000
+  ingressname: theia-cloud-demo-ws-ingress
+  ingressHostnamePrefixes:
+    - "*.webview."
+  minInstances: 3
+  maxInstances: 10
+  requestsMemory: 1000M
+  requestsCpu: 100m
+  limitsMemory: 1200M
+  limitsCpu: "2"
+  imagePullPolicy: IfNotPresent
+  downlinkLimit: 30000
+  uplinkLimit: 30000
+  mountPath: /home/project/persisted
+  monitor:
+    port: 3000
+    activityTracker:
+      timeoutAfter:
+        20
+      notifyAfter:
+        15
+
+---
+apiVersion: theia.cloud/v1beta10
+kind: AppDefinition
+metadata:
+  name: python-latest
+spec:
+  name: python-latest
+  image: ghcr.io/ls1intum/theia/python:latest
+  uid: 101
+  port: 3000
+  ingressname: theia-cloud-demo-ws-ingress
+  ingressHostnamePrefixes:
+    - "*.webview."
+  minInstances: 3
+  maxInstances: 10
+  requestsMemory: 1000M
+  requestsCpu: 100m
+  limitsMemory: 1200M
+  limitsCpu: "2"
+  imagePullPolicy: IfNotPresent
+  downlinkLimit: 30000
+  uplinkLimit: 30000
+  mountPath: /home/project/persisted
+  monitor:
+    port: 3000
+    activityTracker:
+      timeoutAfter:
+        20
+      notifyAfter:
+        15
+
+---
+apiVersion: theia.cloud/v1beta10
+kind: AppDefinition
+metadata:
+  name: rust-latest
+spec:
+  name: rust-latest
+  image: ghcr.io/ls1intum/theia/rust:latest
+  uid: 101
+  port: 3000
+  ingressname: theia-cloud-demo-ws-ingress
+  ingressHostnamePrefixes:
+    - "*.webview."
+  minInstances: 3
+  maxInstances: 10
+  requestsMemory: 1000M
+  requestsCpu: 100m
+  limitsMemory: 1200M
+  limitsCpu: "2"
+  imagePullPolicy: IfNotPresent
+  downlinkLimit: 30000
+  uplinkLimit: 30000
+  mountPath: /home/project/persisted
+  monitor:
+    port: 3000
+    activityTracker:
+      timeoutAfter:
+        20
+      notifyAfter:
+        15

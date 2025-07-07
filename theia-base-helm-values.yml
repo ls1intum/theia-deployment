@@ -1,0 +1,12 @@
+# issuerprod:
+#   # -- name for the let's encrypt production cluster issuer
+#   name: theia-letsencrypt-prod
+
+issuer:
+  # -- email used to issue let's encrypt certificates
+  email: ls1.itg@in.tum.de
+
+issuerprod:
+  # -- We don't want Theia to install the production issuer
+  name: "lets-encrypt-prod"
+  enable: false
