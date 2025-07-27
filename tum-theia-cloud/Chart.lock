@@ -1,0 +1,12 @@
+dependencies:
+- name: theia-cloud
+  repository: https://eclipse-theia.github.io/theia-cloud-helm
+  version: 1.0.1
+- name: theia-certificates
+  repository: file://../theia-certificates
+  version: 0.1.0
+- name: theia-appdefinitions
+  repository: file://../theia-appdefinitions
+  version: 0.1.0
+digest: sha256:c44b7aa64540aa90676272710f9eb3fa6edc7329b84ac4975a1cfd68c40346f6
+generated: "2025-07-27T17:05:00.156687079+02:00"

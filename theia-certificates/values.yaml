@@ -1,0 +1,6 @@
+hosts:
+  configuration:
+    baseHost: artemis.cit.tum.de
+    service: service.theia
+    landing: theia
+    instance: instance.theia

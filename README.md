@@ -19,7 +19,8 @@ helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install -f the
 ```
 
 ```bash
-helm upgrade theia-cloud theia-cloud-repo/theia-cloud --install --namespace theia-prod -f theia-cloud-helm-values.yml
+helm upgrade --install tum-theia-cloud ./tum-theia-cloud   --namespace theia-prod --create-namespace
+helm upgrade --install tum-theia-cloud ./tum-theia-cloud   --namespace theia-test --create-namespace -f tum-theia-cloud -helm-test-values.yaml 
 ```
 
 ## Certificate System
@@ -33,22 +34,6 @@ k create secret tls tum-static-theia-cert --cert=./wildcard-webview-cert/__webvi
 ```
 
 2. Make sure to set the `hosts.allWildcardInstances` and `ingress.instances.allWildcardSecretNames` accordingly.
-
-### Install the instance... certicate from TUM
-Due to the conflict of self-signed certs and cert-manager, the basic `instance...` certificate must also be imported externally and cannot be automatically gathered.
-If the Theia operator allows multiple ingresses in future, this could become unnecessary.
-Make sure to name the secret `ws-cert-secret` as this is hard-coded in Theia for now.
-
-1. Import certificate as secret
-```bash
-k create secret tls ws-cert-secret --cert=./wildcard-webview-cert/__webview_instance_theia_artemis_cit_tum_de.pem --key=./wildcard-webview-cert/wildcard_webview_instance_theia_artemis_cit_tum_de.key
-```
-
-To keep the other certificates still up to date, we also have to apply the certificates-le.yml:
-
-```bash
-kubectl apply -f certificates-le.yml
-```
 
 ## Enable Metrics for Theia
 The installation of the metrics system is based on the[Theia Cloud Observability](https://github.com/eclipsesource/theia-cloud-observability) project.
