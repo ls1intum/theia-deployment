@@ -36,7 +36,7 @@ theia-cloud:
 
   operator:
     image: ghcr.io/ls1intum/theia/operator:pr-22
-    eagerStart: false
+    eagerStart: true
     replicas: 1
     sessionsPerUser: 10
     storageClassName: csi-rbd-sc
@@ -87,6 +87,7 @@ theia-cloud:
 
   keycloak:
     enable: true
+    adminGroup: "/theia-cloud/admin"
 
     # -- Key cloak auth URL. Only has to be specified when enable: true
     authUrl: "https://keycloak.ase.in.tum.de/"
