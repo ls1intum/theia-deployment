@@ -8,24 +8,22 @@ Make sure to set the namespace to your desired location first. For production, w
 helm repo add theia-cloud-repo https://eclipse-theia.github.io/theia-cloud-helm/
 helm repo update
 
-```
-
-```bash
 helm upgrade theia-cloud-base theia-cloud-repo/theia-cloud-base --install -f theia-base-helm-values.yml
-```
 
-```bash
 helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install -f theia-crds-helm-values.yml
+
+helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace your-namespace --create-namespace
 ```
 
+### Installing the Theia Cloud Test Operator
+To install the theia cloud test operator, we use the specific yaml file. For other environments, it makes sense to also create a new values file.
 ```bash
-helm upgrade --install tum-theia-cloud ./tum-theia-cloud   --namespace theia-prod --create-namespace
-helm upgrade --install tum-theia-cloud ./tum-theia-cloud   --namespace theia-test --create-namespace -f tum-theia-cloud -helm-test-values.yaml 
+helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace $namespace --create-namespace -f tum-theia-cloud-helm-test-values.yaml
 ```
 
 ## Certificate System
 Theia creates a new URI for each session<>plugin combination in the namespace of `*.webview.instance.theia.artemis.cit.tum.de`. Thus, a wildcard certificate is required granting the server the authority to securely handle this namespace. 
-Our certificates are externally signed by RBG and cannot be renewed nor used by the regular K8s `cert-manager` - we disable it using `ingress.certManagerAnnotations: false` in the helm values. 
+Our certificates are externally signed by RBG and cannot be renewed nor used by the regular K8s `cert-manager` - we disable it using `ingress.certManagerAnnotations: false` in the helm values.
 
 ### Install the *.webview... certificate from TUM
 1. Import certificate as secret
@@ -62,8 +60,11 @@ Follow [these instructions](https://github.com/eclipsesource/theia-cloud-observa
 
 Finally, create the new dashboard: `kubectl apply -f theia-metrics/manifests`.
 
-## Install custom AppDefinitions
+## Install Custom AppDefinitions
 In Theia, *AppDefinition*s are used to define the environment the students work in. They are build in a compley three-stages pipeline [here](https://github.com/ls1intum/artemis-theia-blueprints).
-To install them, we use a simplified HelmChart - more configuration is possible and documented-in-code in `./theia-appdefinitions/templates/appdefinition.yaml`.
+To install them, we use a simplified HelmChart - more configuration is possible and documented-in-code in `./theia-appdefinitions/templates/appdefinition.yaml`. To apply changes to your cluster, run:
 
-`helm upgrade theia-appdefinitions -f theia-appdefinitions/values.yml --install ./theia-appdefinitions`
+```bash
+helm dependency update ./tum-theia-cloud
+helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace your-namespace --create-namespace -f your-custom-values.yaml
+```
