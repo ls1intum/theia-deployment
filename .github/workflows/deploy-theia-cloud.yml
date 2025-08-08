@@ -2,16 +2,15 @@ name: Deploy Theia Cloud
 
 on:
   workflow_dispatch:
-    inputs:
-      namespace:
-        description: "Namespace to deploy Theia Cloud"
-        required: false
-        default: "theia-prod"
+  push:
+    branches:
+      - feature/**
 
 jobs:
   helm-install:
     name: Install Theia Cloud Helm Chart
     runs-on: ubuntu-latest
+    environment: theia-prod
 
     steps:
       - name: Checkout repository
@@ -33,19 +32,19 @@ jobs:
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
         run: |
-          helm repo add theia-cloud-repo https://eclipse-theia.github.io/theia-cloud-helm/
-          helm repo update
+          helm dependency update ./tum-theia-cloud
+          helm upgrade theia-cloud-base theia-cloud-repo/theia-cloud-base --install -f theia-base-helm-values.yml
+          helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install -f theia-crds-helm-values.yml
 
-      - name: Install Theia Cloud in namespace ${{ github.event.inputs.namespace }}
+      - name: Install Theia Cloud in namespace ${{ secrets.NAMESPACE }}
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
         run: |
-          helm upgrade theia-cloud-base theia-cloud-repo/theia-cloud-base --install \
-          --namespace ${{ github.event.inputs.namespace }} \
-          -f theia-base-helm-values.yml
-          helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install \
-          --namespace ${{ github.event.inputs.namespace }} \
-          -f theia-crds-helm-values.yml
-          helm upgrade theia-cloud theia-cloud-repo/theia-cloud --install \
-          --namespace ${{ github.event.inputs.namespace }} \
-          -f theia-cloud-helm-values.yml
+          # Decode the certificates from base64 and save them to files
+          echo "${{ secrets.THEIA_WILDCARD_CERTIFICATE_CERT }}" | base64 --decode > wildcard.crt
+          echo "${{ secrets.THEIA_WILDCARD_KEY }}" | base64 --decode > wildcard.key
+
+          # Install the Helm chart
+          helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace ${{ secrets.NAMESPACE }} --create-namespace \
+            --set theia-certificates.wildcardCertificate="$(cat wildcard.crt)" \
+            --set theia-certificates.wildcardKey="$(cat wildcard.key)"

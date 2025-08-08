@@ -2,7 +2,6 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: landing-page-cert
-  namespace: {{ .Release.Namespace }}
 spec:
   secretName: landing-page-cert-secret
   issuerRef:

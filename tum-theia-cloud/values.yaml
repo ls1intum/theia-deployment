@@ -1,5 +1,6 @@
 hosts:
-  configuration: &hostsConfig # This is a YAML anchor for reusability and readability
+  configuration:
+    &hostsConfig # This is a YAML anchor for reusability and readability
     baseHost: artemis.cit.tum.de
     service: service.theia
     landing: theia
@@ -26,7 +27,7 @@ theia-cloud:
     clusterIssuer: letsencrypt-prod
     certManagerAnnotations: false
     instances:
-      allWildcardSecretNames: { "*.webview.": tum-static-theia-cert }
+      allWildcardSecretNames: { "*.webview.": static-theia-cert }
 
   monitor:
     enable: true

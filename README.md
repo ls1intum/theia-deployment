@@ -28,7 +28,7 @@ Our certificates are externally signed by RBG and cannot be renewed nor used by 
 ### Install the *.webview... certificate from TUM
 1. Import certificate as secret
 ```bash
-k create secret tls tum-static-theia-cert --cert=./wildcard-webview-cert/__webview_instance_theia_artemis_cit_tum_de.pem --key=./wildcard-webview-cert/wildcard_webview_instance_theia_artemis_cit_tum_de.key
+k create secret tls static-theia-cert --cert=./wildcard-webview-cert/__webview_instance_theia_artemis_cit_tum_de.pem --key=./wildcard-webview-cert/wildcard_webview_instance_theia_artemis_cit_tum_de.key
 ```
 
 2. Make sure to set the `hosts.allWildcardInstances` and `ingress.instances.allWildcardSecretNames` accordingly.
