@@ -27,6 +27,7 @@ jobs:
         run: |
           echo "${{ secrets.KUBECONFIG }}" > kubeconfig
           export KUBECONFIG=$PWD/kubeconfig
+          chmod 600 kubeconfig
           kubectl config get-contexts
           kubectl get nodes
 
@@ -51,8 +52,8 @@ jobs:
           # Install the Helm chart
           helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace ${{ vars.NAMESPACE }} --create-namespace \
             --set theia-certificates.wildcardCertificate="$(cat wildcard.crt)" \
-            --set theia-certificates.wildcardKey="$(cat wildcard.key)"
-            --set theia-cloud.keycloak.cookieSecret="${{ secrets.THEIA_KEYCLOAK_COOKIE_SECRET }}"
-            --set theia-cloud.keycloak.realm="${{ secrets.THEIA_KEYCLOAK_REALM }}"
-            --set theia-cloud.keycloak.clientId="${{ secrets.THEIA_KEYCLOAK_CLIENT_ID }}"
+            --set theia-certificates.wildcardKey="$(cat wildcard.key)" \
+            --set theia-cloud.keycloak.cookieSecret="${{ secrets.THEIA_KEYCLOAK_COOKIE_SECRET }}" \
+            --set theia-cloud.keycloak.realm="${{ secrets.THEIA_KEYCLOAK_REALM }}" \
+            --set theia-cloud.keycloak.clientId="${{ secrets.THEIA_KEYCLOAK_CLIENT_ID }}" \
             --set theia-cloud.keycloak.clientSecret="${{ secrets.THEIA_KEYCLOAK_CLIENT_SECRET }}"
