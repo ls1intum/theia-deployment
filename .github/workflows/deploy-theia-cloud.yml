@@ -46,7 +46,7 @@ jobs:
         run: |
           # Encode the certificates to base64 and save them to files
           echo "${{ secrets.THEIA_WILDCARD_CERTIFICATE_CERT }}" | base64 -w 0 > wildcard.crt
-          echo "${{ secrets.THEIA_WILDCARD_KEY }}" | base64 -w 0 > wildcard.key
+          echo "${{ secrets.THEIA_WILDCARD_CERTIFICATE_KEY }}" | base64 -w 0 > wildcard.key
 
           # Install the Helm chart
           helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace ${{ vars.NAMESPACE }} --create-namespace \
