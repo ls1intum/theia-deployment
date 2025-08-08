@@ -104,9 +104,9 @@ theia-cloud:
     # If you stick with our default public client, you may leave below value. For public clients
     # keycloak does not generate a client-secret, but in order to make oath2-proxy happy,
     # we will pass a value
-    clientSecret: "publicbutoauth2proxywantsasecret"
+    clientSecret: "placeholder"
 
     # -- The cookie secret. This should not be public! Only has to be specified when enable: true
     # See https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview/#generating-a-cookie-secret
     # for how to generate a strong cookie secret.
-    cookieSecret: "OQINaROshtE9TcZkNAm5Zs2Pv3xaWytBmc5W7sPX7ws="
+    cookieSecret: "placeholder"

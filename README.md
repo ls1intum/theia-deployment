@@ -2,6 +2,16 @@
 
 ## Install Theia Cloud
 
+### Prerequisites
+Theia Cloud requires a Kubernetes cluster with the following patch to the ingress-nginx controller to allow snippet annotations (also see [theia-cloud-helm](https://github.com/eclipse-theia/theia-cloud-helm/tree/main):
+
+```bash
+kubectl -n ingress-nginx patch cm ingress-nginx-controller --patch '{"data":{"allow-snippet-annotations":"true" "annotations-risk-level": "Critical" }}'
+kubectl -n ingress-nginx delete pod -l app.kubernetes.io/name=ingress-nginx
+```
+
+### Install Theia Cloud Charts
+
 Make sure to set the namespace to your desired location first. For production, we use `theia-prod`. 
 
 ```bash
