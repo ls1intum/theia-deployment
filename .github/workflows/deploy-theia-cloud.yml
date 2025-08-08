@@ -44,12 +44,11 @@ jobs:
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
         run: |
-          # Decode the certificates from base64 and save them to files
+          # Encode the certificates to base64 and save them to files
           echo "${{ secrets.THEIA_WILDCARD_CERTIFICATE_CERT }}" | base64 > wildcard.crt
           echo "${{ secrets.THEIA_WILDCARD_KEY }}" | base64 > wildcard.key
 
           # Install the Helm chart
           helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace ${{ secrets.NAMESPACE }} --create-namespace \
-            -f ${{}}.yaml \
             --set theia-certificates.wildcardCertificate="$(cat wildcard.crt)" \
             --set theia-certificates.wildcardKey="$(cat wildcard.key)"
