@@ -9,6 +9,8 @@ on:
 jobs:
   helm-install:
     name: Install Theia Cloud Helm Chart
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     environment: theia-prod
 
