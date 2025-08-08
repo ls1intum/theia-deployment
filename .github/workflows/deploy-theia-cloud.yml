@@ -1,0 +1,51 @@
+name: Deploy Theia Cloud
+
+on:
+  workflow_dispatch:
+    inputs:
+      namespace:
+        description: "Namespace to deploy Theia Cloud"
+        required: false
+        default: "theia-prod"
+
+jobs:
+  helm-install:
+    name: Install Theia Cloud Helm Chart
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.0 # Pick latest stable
+
+      - name: Setup Kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > kubeconfig
+          export KUBECONFIG=$PWD/kubeconfig
+          kubectl config get-contexts
+          kubectl get nodes
+
+      - name: Setup Helm dependencies
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+        run: |
+          helm repo add theia-cloud-repo https://eclipse-theia.github.io/theia-cloud-helm/
+          helm repo update
+
+      - name: Install Theia Cloud in namespace ${{ github.event.inputs.namespace }}
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+        run: |
+          helm upgrade theia-cloud-base theia-cloud-repo/theia-cloud-base --install \
+          --namespace ${{ github.event.inputs.namespace }} \
+          -f theia-base-helm-values.yml
+          helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install \
+          --namespace ${{ github.event.inputs.namespace }} \
+          -f theia-crds-helm-values.yml
+          helm upgrade theia-cloud theia-cloud-repo/theia-cloud --install \
+          --namespace ${{ github.event.inputs.namespace }} \
+          -f theia-cloud-helm-values.yml
