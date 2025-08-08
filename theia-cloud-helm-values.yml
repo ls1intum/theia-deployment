@@ -29,9 +29,14 @@ monitor:
     interval: 3
 
 operator:
+  image: theiacloud/theia-cloud-operator:1.1.0-next
+  eagerStart: true
   replicas: 1
   sessionsPerUser: 10
   storageClassName: csi-rbd-sc
+
+service:
+  image: theiacloud/theia-cloud-service:1.1.0-next
 
 preloading:
   images:
