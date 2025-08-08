@@ -40,7 +40,7 @@ jobs:
           helm upgrade theia-cloud-base theia-cloud-repo/theia-cloud-base --install -f theia-base-helm-values.yml
           helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install -f theia-crds-helm-values.yml
 
-      - name: Install Theia Cloud in namespace ${{ secrets.NAMESPACE }}
+      - name: Install Theia Cloud in namespace ${{ vars.NAMESPACE }}
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
         run: |
@@ -49,6 +49,6 @@ jobs:
           echo "${{ secrets.THEIA_WILDCARD_KEY }}" | base64 > wildcard.key
 
           # Install the Helm chart
-          helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace ${{ secrets.NAMESPACE }} --create-namespace \
+          helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace ${{ vars.NAMESPACE }} --create-namespace \
             --set theia-certificates.wildcardCertificate="$(cat wildcard.crt)" \
             --set theia-certificates.wildcardKey="$(cat wildcard.key)"
