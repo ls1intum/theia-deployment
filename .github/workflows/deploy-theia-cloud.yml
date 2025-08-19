@@ -37,7 +37,7 @@ jobs:
         run: |
           helm repo add theia-cloud-repo https://eclipse-theia.github.io/theia-cloud-helm/
           helm repo update
-          helm dependency update ./tum-theia-cloud
+          helm dependency update ./charts/tum-theia-cloud
           helm upgrade theia-cloud-base theia-cloud-repo/theia-cloud-base --install -f theia-base-helm-values.yml
           helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install -f theia-crds-helm-values.yml
 
@@ -50,7 +50,7 @@ jobs:
           echo "${{ secrets.THEIA_WILDCARD_CERTIFICATE_KEY }}" | base64 -w 0 > wildcard.key
 
           # Install the Helm chart
-          helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace ${{ vars.NAMESPACE }} --create-namespace \
+          helm upgrade --install tum-theia-cloud ./charts/tum-theia-cloud --namespace ${{ vars.NAMESPACE }} --create-namespace \
             --set theia-certificates.wildcardCertificate="$(cat wildcard.crt)" \
             --set theia-certificates.wildcardKey="$(cat wildcard.key)" \
             --set theia-cloud.keycloak.cookieSecret="${{ secrets.THEIA_KEYCLOAK_COOKIE_SECRET }}" \
