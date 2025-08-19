@@ -2,9 +2,11 @@ name: Deploy Theia Cloud
 
 on:
   workflow_dispatch:
+    # TODO: Fix this trigger to only deploy changes to the main branch
   push:
     branches:
       - feature/**
+      - feat/**
 
 jobs:
   helm-install:
