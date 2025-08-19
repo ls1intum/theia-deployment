@@ -13,7 +13,7 @@ theia-certificates:
 theia-cloud:
   app:
     id: nJV3nKZmpxTD4wu2
-    name: Theia Cloud
+    name: Artemis Online IDE
 
   issuer:
     email: ls1.itg@in.tum.de
@@ -36,14 +36,14 @@ theia-cloud:
       interval: 3
 
   operator:
-    image: ghcr.io/ls1intum/theia/operator:pr-22
+    image: ghcr.io/ls1intum/theia/operator:latest
     eagerStart: false
     replicas: 1
     sessionsPerUser: 10
     storageClassName: csi-rbd-sc
 
   service:
-    image: ghcr.io/ls1intum/theia/service:pr-22
+    image: ghcr.io/ls1intum/theia/service:latest
 
   preloading:
     images:
@@ -69,7 +69,7 @@ theia-cloud:
     ephemeralStorage: false
     additionalApps:
       java-17-latest:
-        label: Java
+        label: Java 17
       c-latest:
         label: C
       javascript-latest:
@@ -91,4 +91,3 @@ theia-cloud:
 
     # -- Key cloak auth URL. Only has to be specified when enable: true
     authUrl: "https://keycloak.ase.in.tum.de/"
-
