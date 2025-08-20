@@ -106,6 +106,6 @@ theia-cloud:
     # clientSecret: "publicbutoauth2proxywantsasecret"
 
     # # -- The cookie secret. This should not be public! Only has to be specified when enable: true
-    # # See https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview/#generating-a-cookie-secret
+    # # See https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview?_highlight=cookie#generating-a-cookie-secret
     # # for how to generate a strong cookie secret.
     # cookieSecret: "OQINaROshtE9TcZkNAm5Zs2Pv3xaWytBmc5W7sPX7ws="
