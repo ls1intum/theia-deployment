@@ -1,0 +1,2 @@
+# -- The cluster issuer to use for the certificate
+clusterIssuer: theia-cloud-selfsigned-issuer

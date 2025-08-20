@@ -8,5 +8,5 @@ issuer:
 
 issuerprod:
   # -- We don't want Theia to install the production issuer
-  name: "lets-encrypt-prod"
+  name: "letsencrypt-prod"
   enable: false

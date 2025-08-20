@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: service-cert
+spec:
+  secretName: service-cert-secret
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: "{{ .Values.hosts.configuration.service }}.{{ .Values.hosts.configuration.baseHost }}"
+  dnsNames:
+    - "{{ .Values.hosts.configuration.service }}.{{ .Values.hosts.configuration.baseHost }}"
+  privateKey:
+    rotationPolicy: Never
