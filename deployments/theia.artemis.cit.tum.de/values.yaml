@@ -2,9 +2,9 @@ hosts:
   configuration:
     &hostsConfig # This is a YAML anchor for reusability and readability
     baseHost: artemis.cit.tum.de
-    service: service.theia-test
-    landing: theia-test
-    instance: instance.theia-test
+    service: service.theia
+    landing: theia
+    instance: instance.theia
 
 theia-certificates:
   hosts:
@@ -25,7 +25,7 @@ theia-cloud:
   ingress:
     #instanceName: "theia-cloud-ws-ingress"
     clusterIssuer: letsencrypt-prod
-    certManagerAnnotations: false
+    certManagerAnnotations: true
     instances:
       allWildcardSecretNames: { "*.webview.": static-theia-cert }
 
