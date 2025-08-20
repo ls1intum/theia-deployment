@@ -53,6 +53,7 @@ jobs:
 
           # Install the Helm chart
           helm upgrade --install tum-theia-cloud ./charts/tum-theia-cloud --namespace ${{ vars.NAMESPACE }} --create-namespace \
+            -f ${{ vars.HELM_VALUES_FILE }} \
             --set theia-certificates.wildcardCertificate="$(cat wildcard.crt)" \
             --set theia-certificates.wildcardKey="$(cat wildcard.key)" \
             --set theia-cloud.keycloak.cookieSecret="${{ secrets.THEIA_KEYCLOAK_COOKIE_SECRET }}" \

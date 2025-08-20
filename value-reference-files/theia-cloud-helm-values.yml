@@ -57,7 +57,7 @@ landingPage:
   image: ghcr.io/ls1intum/theia/landing-page
   # We can define a default blueprint
   appDefinition: "java-17-latest"
-  ephemeralStorage: false
+  ephemeralStorage: true
   additionalApps:
     java-17-latest:
       label: Java
