@@ -25,7 +25,7 @@ theia-cloud:
   ingress:
     #instanceName: "theia-cloud-ws-ingress"
     clusterIssuer: letsencrypt-prod
-    certManagerAnnotations: true
+    certManagerAnnotations: false
     instances:
       allWildcardSecretNames: { "*.webview.": static-theia-cert }
 
