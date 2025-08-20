@@ -53,9 +53,19 @@ k create secret tls static-theia-cert --cert=./wildcard-webview-cert/__webview_i
 
 Go to Keycloak realm > Clients > theia-cloud > Client Scopes > theia-dedicated > Mappers and add the following mappers:
 
+![Keycloak Client Scopes](docs/images/keycloak_client_scopes.png)
+
 - username
-- audience resolver
+
+![Username Mapper](docs/images/keycloak_client_scope_username.png)
+
+- audience
+
+![Audience Mapper](docs/images/keycloak_client_scope_audience.png)
+
 - groups
+
+![Groups Mapper](docs/images/keycloak_client_scope_groups.png)
 
 ## Enable Metrics for Theia
 
