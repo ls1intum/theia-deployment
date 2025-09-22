@@ -64,7 +64,7 @@ theia-cloud:
   preloading:
     images:
       # Landing page with improved UI and logo support
-      - ghcr.io/ls1intum/theia/landing-page:latest
+      - ghcr.io/ls1intum/theia/landing-page:issue-30-improve-landing-page
       # Programming language environments
       - ghcr.io/ls1intum/theia/java-17:latest
       - ghcr.io/ls1intum/theia/c:latest
@@ -83,7 +83,7 @@ theia-cloud:
   # Landing page configuration with improved UI
   landingPage:
     # Enhanced landing page with VantaJS background and proper logo support
-    image: ghcr.io/ls1intum/theia/landing-page
+    image: ghcr.io/ls1intum/theia/landing-page:issue-30-improve-landing-page
     # Default development environment
     appDefinition: "java-17-latest"
     # Use persistent storage
