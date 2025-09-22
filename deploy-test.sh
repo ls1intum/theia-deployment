@@ -45,14 +45,14 @@ if kubectl get secret theia-keycloak-secrets -n "$namespace" --insecure-skip-tls
         COOKIE_SECRET=$(generate_cookie_secret)
         kubectl create namespace "$namespace" --dry-run=client -o yaml | kubectl apply -f - --insecure-skip-tls-verify
         kubectl create secret generic theia-keycloak-secrets -n "$namespace" \
-            --from-literal=client-secret="$CLIENT_SECRET" \
-            --from-literal=cookie-secret="$COOKIE_SECRET" \
+            --from-literal=clientSecret="$CLIENT_SECRET" \
+            --from-literal=cookieSecret="$COOKIE_SECRET" \
             --dry-run=client -o yaml | kubectl apply -f - --insecure-skip-tls-verify
         echo "✅ New secrets generated and stored"
     else
         # Extract existing secrets for Helm deployment
-        CLIENT_SECRET=$(kubectl get secret theia-keycloak-secrets -n "$namespace" --insecure-skip-tls-verify -o jsonpath='{.data.client-secret}' | base64 -d)
-        COOKIE_SECRET=$(kubectl get secret theia-keycloak-secrets -n "$namespace" --insecure-skip-tls-verify -o jsonpath='{.data.cookie-secret}' | base64 -d)
+        CLIENT_SECRET=$(kubectl get secret theia-keycloak-secrets -n "$namespace" --insecure-skip-tls-verify -o jsonpath='{.data.clientSecret}' | base64 -d)
+        COOKIE_SECRET=$(kubectl get secret theia-keycloak-secrets -n "$namespace" --insecure-skip-tls-verify -o jsonpath='{.data.cookieSecret}' | base64 -d)
         echo "✅ Using existing secrets"
     fi
 else
@@ -63,8 +63,8 @@ else
     # Create namespace and secrets
     kubectl create namespace "$namespace" --dry-run=client -o yaml | kubectl apply -f - --insecure-skip-tls-verify
     kubectl create secret generic theia-keycloak-secrets -n "$namespace" \
-        --from-literal=client-secret="$CLIENT_SECRET" \
-        --from-literal=cookie-secret="$COOKIE_SECRET" \
+        --from-literal=clientSecret="$CLIENT_SECRET" \
+        --from-literal=cookieSecret="$COOKIE_SECRET" \
         --dry-run=client -o yaml | kubectl apply -f - --insecure-skip-tls-verify
     echo "✅ New secrets generated and stored"
 fi
