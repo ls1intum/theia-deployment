@@ -1,0 +1,49 @@
+{{- $logoFileExtension :=  tpl (index .Values "theia-cloud" "landingPage" "logoFileExtension" | toString) . -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: landing-page-config
+  namespace: {{ .Release.Namespace }}
+data:
+  config.js: |
+    window.theiaCloudConfig = {
+      appId: "{{ tpl (index .Values "theia-cloud" "app" "id" | toString) . }}",
+      appName: "{{ tpl (index .Values "theia-cloud" "app" "name" | toString) . }}",
+      useEphemeralStorage: {{ tpl (index .Values "theia-cloud" "landingPage" "ephemeralStorage" | toString) . }},
+      useKeycloak: {{ tpl (index .Values "theia-cloud" "keycloak" "enable" | toString) . }},
+      keycloakAuthUrl: "{{ tpl (index .Values "theia-cloud" "keycloak" "authUrl" | toString) . }}",
+      keycloakRealm: "{{ tpl (index .Values "theia-cloud" "keycloak" "realm" | toString) . }}",
+      keycloakClientId: "{{ tpl (index .Values "theia-cloud" "keycloak" "clientId" | toString) . }}",
+      {{- if .Values.hosts.usePaths }}
+      serviceUrl: "{{ tpl (index .Values "theia-cloud" "service" "protocol" | toString) . }}://{{ tpl (.Values.hosts.configuration.baseHost | toString) . }}/{{ tpl (.Values.hosts.configuration.service | toString) . }}",
+      {{- else }}
+      serviceUrl: "{{ tpl (index .Values "theia-cloud" "service" "protocol" | toString) . }}://{{ tpl (.Values.hosts.configuration.service | toString) . }}.{{ tpl (.Values.hosts.configuration.baseHost | toString) . }}",
+      {{- end }}
+      appDefinition: "{{ tpl (index .Values "theia-cloud" "landingPage" "appDefinition" | toString) . }}",
+      additionalApps: [
+        {{- range $key, $val := (index .Values "theia-cloud" "landingPage" "additionalApps") }}
+        {
+          appId: {{ $key | quote}},
+          appName: {{ $val.label | quote }},
+          {{- if $val.icon }}
+          logo: {{ $val.icon | quote }},
+          {{- end }}
+        },
+        {{- end }}
+      ],
+      logoFileExtension: "{{ $logoFileExtension }}",
+      disableInfo: {{ tpl (index .Values "theia-cloud" "landingPage" "disableInfo" | toString) . }},
+      {{- if (index .Values "theia-cloud" "landingPage" "infoText") }}
+      infoText: "{{ tpl (index .Values "theia-cloud" "landingPage" "infoText" | toString) . }}",
+      {{- end }}
+      {{- if (index .Values "theia-cloud" "landingPage" "infoTitle") }}
+      infoTitle: "{{ tpl (index .Values "theia-cloud" "landingPage" "infoTitle" | toString) . }}",
+      {{- end }}
+      {{- if (index .Values "theia-cloud" "landingPage" "loadingText") }}
+      loadingText: "{{ tpl (index .Values "theia-cloud" "landingPage" "loadingText" | toString) . }}",
+      {{- end }}
+    };
+binaryData:
+  {{- if (index .Values "theia-cloud" "landingPage" "logoData") }}
+  {{ printf "logo.%s: " $logoFileExtension }}{{ (index .Values "theia-cloud" "landingPage" "logoData") }}
+  {{- end }}
