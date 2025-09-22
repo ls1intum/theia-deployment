@@ -1,0 +1,140 @@
+# Theia Cloud Test Environment - Secure Configuration
+# This file contains NON-SENSITIVE values for deploying Theia Cloud to the test namespace
+# Secrets are provided via Helm --set flags or Kubernetes secrets
+# Last updated: 2025-09-22
+
+hosts:
+  configuration:
+    &hostsConfig # This is a YAML anchor for reusability and readability
+    baseHost: artemis.cit.tum.de
+    service: service.theia-test
+    landing: theia-test
+    instance: instance.theia-test
+
+theia-certificates:
+  hosts:
+    configuration: *hostsConfig
+
+theia-cloud:
+  app:
+    id: nJV3nKZmpxTD4wu2
+    name: Theia Cloud Test
+
+  issuer:
+    # Production email for Let's Encrypt certificates
+    email: ls1.itg@in.tum.de
+
+  hosts:
+    configuration: *hostsConfig
+    # Support for webview wildcard subdomains
+    allWildcardInstances: ["*.webview."]
+
+  ingress:
+    # Use Let's Encrypt production for valid SSL certificates
+    clusterIssuer: letsencrypt-prod
+    certManagerAnnotations: false
+    instances:
+      # Static certificate for wildcard domains
+      allWildcardSecretNames: { "*.webview.": static-theia-cert }
+
+  # Monitoring configuration
+  monitor:
+    enable: true
+    activityTracker:
+      enable: true
+      interval: 3
+
+  # Operator configuration
+  operator:
+    # Production image with latest improvements
+    image: ghcr.io/ls1intum/theia/operator:pr-22
+    eagerStart: false
+    replicas: 1
+    # Allow up to 10 sessions per user for testing
+    sessionsPerUser: 10
+    # Use Ceph RBD storage class for persistent volumes
+    storageClassName: csi-rbd-sc
+
+  # Service configuration
+  service:
+    # Production image with latest improvements
+    image: ghcr.io/ls1intum/theia/service:pr-22
+
+  # Image preloading for faster session startup
+  preloading:
+    images:
+      # Landing page with improved UI and logo support
+      - ghcr.io/ls1intum/theia/landing-page:latest
+      # Programming language environments
+      - ghcr.io/ls1intum/theia/java-17:latest
+      - ghcr.io/ls1intum/theia/c:latest
+      - ghcr.io/ls1intum/theia/javascript:latest
+      - ghcr.io/ls1intum/theia/ocaml:latest
+      - ghcr.io/ls1intum/theia/rust:latest
+      - ghcr.io/ls1intum/theia/python:latest
+
+  # Always pull latest images for testing
+  imagePullPolicy: Always
+
+  # Do not install demo application in test environment
+  demoApplication:
+    install: false
+
+  # Landing page configuration with improved UI
+  landingPage:
+    # Enhanced landing page with VantaJS background and proper logo support
+    image: ghcr.io/ls1intum/theia/landing-page:latest
+    # Default development environment
+    appDefinition: "java-17-latest"
+    # Use persistent storage
+    ephemeralStorage: false
+    # Programming language options with proper logo paths
+    additionalApps:
+      java-17-latest:
+        label: Java
+        icon: "/assets/logos/java-logo.png"
+      c-latest:
+        label: C
+        icon: "/assets/logos/c-logo.png"
+      javascript-latest:
+        label: Javascript
+        icon: "/assets/logos/javascript-logo.png"
+      ocaml-latest:
+        label: Ocaml
+        icon: "/assets/logos/ocaml-logo.png"
+      python-latest:
+        label: Python
+        icon: "/assets/logos/python-logo.png"
+      rust-latest:
+        label: Rust
+        icon: "/assets/logos/rust-logo.png"
+    # Custom branding for test environment
+    infoTitle: "Welcome to Theia Test - your tailor-made online IDE"
+    infoText: "We are offering a test online programming environment perfectly fitting for your project, please log in to continue."
+    loadingText: "Preparing your personal Test IDE..."
+    logoFileExtension: "png"
+
+  # Keycloak authentication configuration
+  # SECRETS PROVIDED VIA HELM --set FLAGS OR KUBERNETES SECRETS
+  keycloak:
+    enable: true
+    # Production Keycloak instance
+    authUrl: "https://keycloak.ase.in.tum.de/"
+    # Test realm for isolated testing
+    realm: "Test"
+    # Keycloak client configuration
+    clientId: "theia-cloud"
+    # SECURITY: clientSecret and cookieSecret are provided via:
+    # 1. Helm --set flags during deployment
+    # 2. The deploy-test-secure.sh script automatically generates them
+    # 3. No hardcoded secrets in this file for security
+
+# SECURITY NOTES:
+# 1. Secrets (clientSecret, cookieSecret) are NOT stored in this file
+# 2. Use Helm --set flags to provide secrets during deployment:
+#    helm upgrade --install tum-theia-cloud-test ./charts/tum-theia-cloud \
+#      --namespace theia-test -f theia-test-values-secure.yaml \
+#      --set theia-cloud.keycloak.clientSecret="$(generate_client_secret)" \
+#      --set theia-cloud.keycloak.cookieSecret="$(generate_cookie_secret)"
+# 3. Or create Kubernetes secrets and reference them in templates
+# 4. For CI/CD, store secrets in GitHub Secrets or similar secure storage

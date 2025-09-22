@@ -26,13 +26,62 @@ helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install -f the
 helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace your-namespace --create-namespace
 ```
 
-### Installing the Theia Cloud Test Operator
+### Installing the Theia Cloud Test Environment
 
-To install the theia cloud test operator, we use the specific yaml file. For other environments, it makes sense to also create a new values file.
+#### Secure Deployment (Recommended)
+
+The test environment uses a secure deployment script that automatically generates OAuth2 secrets and stores them safely in Kubernetes secrets. This follows security best practices by not storing sensitive data in Git.
 
 ```bash
-helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace $namespace --create-namespace -f tum-theia-cloud-helm-test-values.yaml
+# Make the deployment script executable
+chmod +x deploy-test-secure.sh
+
+# Deploy to test environment with auto-generated secrets
+./deploy-test-secure.sh
 ```
+
+The script will:
+- Generate secure OAuth2 client and cookie secrets
+- Store secrets in Kubernetes secret `theia-keycloak-secrets`
+- Deploy using `value-reference-files/theia-test-values.yaml` configuration
+- Deploy to `theia-test` namespace with enhanced landing page
+
+**Features included:**
+- ✨ Enhanced landing page with VantaJS background animation
+- 🎨 Programming language icons (Java, C, JavaScript, OCaml, Python, Rust)
+- 🔐 Secure OAuth2 integration with Keycloak
+- 📱 Responsive design for mobile/tablet
+- 🚀 Fast session startup with image preloading
+
+#### Manual Deployment (Advanced)
+
+If you prefer manual deployment or need custom secret values:
+
+```bash
+# Generate secrets manually
+CLIENT_SECRET=$(openssl rand -hex 16)
+COOKIE_SECRET=$(openssl rand -base64 32)
+
+# Deploy with manual secrets
+helm upgrade --install tum-theia-cloud-test ./charts/tum-theia-cloud \
+  --namespace theia-test --create-namespace \
+  -f value-reference-files/theia-test-values.yaml \
+  --set theia-cloud.keycloak.clientSecret="$CLIENT_SECRET" \
+  --set theia-cloud.keycloak.cookieSecret="$COOKIE_SECRET"
+```
+
+#### Access URLs
+
+After successful deployment:
+- **Landing Page**: https://theia-test.artemis.cit.tum.de/
+- **Service API**: https://service.theia-test.artemis.cit.tum.de/
+
+#### Security Notes
+
+- 🔐 OAuth2 secrets are generated per deployment and stored in Kubernetes secrets
+- 🚫 No sensitive data is stored in Git repository  
+- 🔄 Secrets can be easily rotated by re-running the deployment script
+- 🏢 Compatible with existing CI/CD security patterns
 
 ## Certificate System
 
