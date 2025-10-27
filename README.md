@@ -1,5 +1,48 @@
 # Theia Deployment
 
+## Getting Started
+
+### 1. Configure Kubernetes Access
+
+Before deploying Theia Cloud, you need to configure access to the Kubernetes cluster:
+
+1. **Download your KubeConfig from Rancher:**
+   - Go to [Rancher Dashboard](https://rancher.ase.cit.tum.de/dashboard/c/c-m-nd6hdzjw/explorer/namespace/theia-test#Resources)
+   - Click on **"Download KubeConfig"**
+   - Save the file as `theia-prod.yaml` in the root of this repository
+
+2. **Merge the configuration into your kubectl config:**
+```bash
+# Merge the theia-prod.yaml into your kubectl configuration
+KUBECONFIG=~/.kube/config:./theia-prod.yaml kubectl config view --flatten > ~/.kube/config.merged && mv ~/.kube/config.merged ~/.kube/config
+```
+
+3. **Set the theia-prod context as active:**
+```bash
+kubectl config use-context theia-prod
+```
+
+4. **Verify authentication:**
+```bash
+kubectl get namespaces
+```
+
+If successful, you should see a list of namespaces including `theia-test` and `theia-prod`.
+
+### 2. Deploy Theia Cloud
+
+Now you're ready to deploy Theia Cloud. Choose one of the deployment options:
+
+#### Test Environment
+```bash
+./deploy-test.sh
+```
+
+#### Production Environment
+```bash
+./deploy.sh
+```
+
 ## Install Theia Cloud
 
 ### Prerequisites
