@@ -49,5 +49,5 @@ jobs:
     # Environment variables NAMESPACE and HELM_VALUES_PATH are read from GitHub Environment settings
     uses: ./.github/workflows/deploy-theia.yml
     with:
-      environment: prod
+      environment: theia-prod
     secrets: inherit
