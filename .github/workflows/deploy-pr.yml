@@ -1,0 +1,35 @@
+# ==============================================================================
+# PR Deployment Workflow
+# ==============================================================================
+# This workflow handles deployments triggered by pull requests and manual
+# selections via the GitHub Actions UI.
+# ==============================================================================
+
+name: Deploy PR to Environment
+
+on:
+  # Automatic trigger on PR events
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+  # Manual trigger via GitHub UI
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select environment to deploy to"
+        required: true
+        type: choice
+        options:
+          - test1
+
+jobs:
+  # Job 1: Deploy to Test1 environment
+  # Runs automatically on all PR events OR when manually selected
+  # Environment variables NAMESPACE and HELM_VALUES_PATH are read from GitHub Environment settings
+  deploy-test1:
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.environment == 'test1')
+    name: Deploy to Test1
+    uses: ./.github/workflows/deploy-theia.yml
+    with:
+      environment: test1
+    secrets: inherit
