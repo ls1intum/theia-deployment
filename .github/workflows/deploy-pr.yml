@@ -3,28 +3,6 @@
 # ==============================================================================
 # This workflow handles deployments triggered by pull requests and manual
 # selections via the GitHub Actions UI.
-#
-# Behavior:
-#   1. Automatic PR Deployments:
-#      - Triggered when a PR is opened, updated, or reopened
-#      - Automatically deploys to theia-test1 environment
-#      - Requires approval if configured in GitHub Environment settings
-#
-#   2. Manual Deployments:
-#      - Triggered via "Run workflow" button in GitHub Actions UI
-#      - Allows selection of any environment (test1, staging, or prod)
-#      - Useful for deploying specific branches to specific environments
-#
-# Environment Configuration:
-#   Each environment (theia-test1, theia-staging, theia-prod) must be
-#   configured in GitHub Settings > Environments with:
-#   - All required secrets (see deploy-theia.yml for list)
-#   - Optional protection rules (required reviewers, branch restrictions)
-#
-# Adding New Environments:
-#   1. Add the environment name to the 'options' list below
-#   2. Create a new job following the pattern of existing jobs
-#   3. Ensure the environment is configured in GitHub Settings
 # ==============================================================================
 
 name: Deploy PR to Environment
@@ -38,48 +16,21 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Select environment to deploy to'
+        description: "Select environment to deploy to"
         required: true
         type: choice
         options:
-          - theia-test1
-          - theia-staging
-          - theia-prod
+          - test1
 
 jobs:
   # Job 1: Deploy to Test1 environment
   # Runs automatically on all PR events OR when manually selected
   deploy-test1:
-    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.environment == 'theia-test1')
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.environment == 'test1')
     name: Deploy to Test1
     uses: ./.github/workflows/deploy-theia.yml
     with:
-      environment: theia-test1
+      environment: test1
       namespace: theia-test1
       helm_values_path: deployments/theia-test1.artemis.cit.tum.de
-    secrets: inherit
-
-  # Job 2: Deploy to Staging environment
-  # Only runs when manually selected (not on automatic PR events)
-  deploy-staging:
-    if: github.event_name == 'workflow_dispatch' && inputs.environment == 'theia-staging'
-    name: Deploy to Staging
-    uses: ./.github/workflows/deploy-theia.yml
-    with:
-      environment: theia-staging
-      namespace: theia-staging
-      helm_values_path: deployments/theia-staging.artemis.cit.tum.de
-    secrets: inherit
-
-  # Job 3: Deploy to Production environment
-  # Only runs when manually selected (not on automatic PR events)
-  # Requires approval as configured in GitHub Environment settings
-  deploy-prod:
-    if: github.event_name == 'workflow_dispatch' && inputs.environment == 'theia-prod'
-    name: Deploy to Production
-    uses: ./.github/workflows/deploy-theia.yml
-    with:
-      environment: theia-prod
-      namespace: theia-prod
-      helm_values_path: deployments/theia.artemis.cit.tum.de
     secrets: inherit

@@ -24,7 +24,7 @@
 #   - THEIA_KEYCLOAK_CLIENT_SECRET: Keycloak client secret
 #
 # Parameters:
-#   - environment: GitHub environment name (e.g., theia-prod, theia-staging)
+#   - environment: GitHub environment name (e.g., theia-prod, theia-staging, test1)
 #   - namespace: Target Kubernetes namespace
 #   - helm_values_path: Path to environment-specific Helm values directory
 # ==============================================================================

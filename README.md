@@ -48,7 +48,7 @@ This repository uses automated GitHub Actions workflows to deploy Theia Cloud to
 │  └─────────────────────┘  │   │  └─────────────────────┘  │
 │                           │   │                           │
 └───────────────────────────┘   │  ┌─────────────────────┐  │
-                                │  │  theia-test1        │  │
+                                │  │  theia-test         │  │
                                 │  │                     │  │
                                 │  │  Auto on PR         │  │
                                 │  │  (Approval Req.)    │  │
@@ -59,7 +59,7 @@ This repository uses automated GitHub Actions workflows to deploy Theia Cloud to
 Deployment Triggers:
   • theia-prod:     Manual via GitHub UI → Requires Approval
   • theia-staging:  Automatic on main push → No Approval
-  • theia-test1:    Automatic on PR push → Requires Approval (configurable)
+  • test1:    Automatic on PR push → Requires Approval (configurable)
 ```
 
 ### Environments
@@ -76,9 +76,11 @@ The following environments are configured:
   - Deployment: Automatically on push to `main` branch
   - Config: [deployments/theia-staging.artemis.cit.tum.de](deployments/theia-staging.artemis.cit.tum.de/)
 
-- **theia-test1**: Test environment (same cluster, different namespace)
+- **test1**: Test environment (same cluster, different namespace)
+  - GitHub Environment: `test1`
   - Namespace: `theia-test1`
   - Deployment: Automatically on PR push (with approval gate)
+  - Domain: `test1.theia-test.artemis.cit.tum.de`
   - Config: [deployments/theia-test1.artemis.cit.tum.de](deployments/theia-test1.artemis.cit.tum.de/)
 
 ### GitHub Environment Setup
@@ -99,7 +101,7 @@ For each environment, configure the following secrets and variables in GitHub Se
 
 - **theia-prod**: Require manual approval
 - **theia-staging**: No approval required (auto-deploy)
-- **theia-test1**: Configure as needed (recommended: approval for team leads)
+- **test1**: Configure as needed (recommended: approval for team leads)
 
 ### Deployment Workflows
 
@@ -138,9 +140,46 @@ Create a new directory in `deployments/` with your environment's domain name (e.
 mkdir -p deployments/theia-test2.artemis.cit.tum.de
 ```
 
-Copy and adjust the values files from an existing environment:
+Copy the values files from an existing environment and adjust them:
 
-- `values.yaml` - Update hosts, app name, and environment-specific settings
+```bash
+cp -r deployments/test1.theia-test.artemis.cit.tum.de/* deployments/test2.theia-test.artemis.cit.tum.de/
+```
+
+**Update `values.yaml`:**
+
+For **test environments**, use the `theia-test.artemis.cit.tum.de` base domain structure:
+
+```yaml
+hosts:
+  configuration:
+    &hostsConfig
+    baseHost: theia-test.artemis.cit.tum.de  # Shared base for all test envs
+    service: service.test2                    # test2, test3, etc.
+    landing: test2
+    instance: instance.test2
+```
+
+For **staging environments**, use the main `artemis.cit.tum.de` base domain:
+
+```yaml
+hosts:
+  configuration:
+    &hostsConfig
+    baseHost: artemis.cit.tum.de
+    service: service.theia-staging2  # or theia-staging3, etc.
+    landing: theia-staging2
+    instance: instance.theia-staging2
+```
+
+Also update:
+
+- `theia-cloud.app.name` - Change to reflect the new environment (e.g., "Artemis Online IDE (Test2)")
+- `landingPage.infoTitle` - Update the environment name in the title
+
+**Files to adjust:**
+
+- `values.yaml` - Update hosts, app name, and environment-specific settings (see examples above)
 - `theia-base-helm-values.yml` - Update issuer email if needed
 - `theia-crds-helm-values.yml` - Usually no changes needed
 
@@ -148,7 +187,7 @@ Copy and adjust the values files from an existing environment:
 
 1. Go to your repository **Settings > Environments**
 2. Click **New environment**
-3. Enter the environment name (e.g., `theia-test2`)
+3. Enter the environment name (e.g., `test2`)
 4. Configure **Environment protection rules** if needed:
    - Add required reviewers for approval gates
    - Set deployment branch rules
@@ -181,7 +220,7 @@ In the newly created environment, add the following secrets:
 ##### Important Notes
 
 - **Base64 encoding**: Use `-w 0` flag (Linux) or no flag (macOS) to prevent line wrapping
-- **Certificate format**: Ensure you're using the correct wildcard certificate for your domain (e.g., `*.webview.instance.theia-test2.artemis.cit.tum.de`)
+- **Certificate format**: Ensure you're using the correct wildcard certificate for your domain (e.g., `*.webview.instance.test2.theia-test.artemis.cit.tum.de`)
 - **Keycloak setup**: You may need to create a new Keycloak client for the new environment or reuse an existing one
 - **Namespace isolation**: Each environment uses its own Kubernetes namespace, but staging/test environments share the same cluster
 
@@ -194,8 +233,8 @@ Add the new environment to the PR deployment workflow:
 
    ```yaml
    options:
-     - theia-test1
-     - theia-test2  # Add your new environment
+     - test1
+     - test2  # Add your new environment
      - theia-staging
      - theia-prod
    ```
@@ -204,11 +243,11 @@ Add the new environment to the PR deployment workflow:
 
    ```yaml
    deploy-test2:
-     if: github.event_name == 'workflow_dispatch' && inputs.environment == 'theia-test2'
+     if: github.event_name == 'workflow_dispatch' && inputs.environment == 'test2'
      name: Deploy to Test2
      uses: ./.github/workflows/deploy-theia.yml
      with:
-       environment: theia-test2
+       environment: test2
        namespace: theia-test2
        helm_values_path: deployments/theia-test2.artemis.cit.tum.de
      secrets: inherit
@@ -257,18 +296,34 @@ helm upgrade --install theia-cloud-combined ./charts/theia-cloud-combined --name
 
 ## Certificate System
 
-Theia creates a new URI for each session<>plugin combination in the namespace of `*.webview.instance.theia.artemis.cit.tum.de`. Thus, a wildcard certificate is required granting the server the authority to securely handle this namespace.
+Theia creates a new URI for each session<>plugin combination. For different environments, wildcard certificates are required:
+
+- **Production**: `*.webview.instance.theia.artemis.cit.tum.de`
+- **Staging**: `*.webview.instance.theia-staging.artemis.cit.tum.de`
+- **Test1**: `*.webview.instance.test1.theia-test.artemis.cit.tum.de`
+
+### TUM Specific Instructions
+
 Our certificates are externally signed by RBG and cannot be renewed nor used by the regular K8s `cert-manager` - we disable it using `ingress.certManagerAnnotations: false` in the helm values.
 
-### Install the *.webview... certificate from TUM
+1. Create a certificate request at harica.gr
+    - You need to request a wildcard certificate for the base domain you intend to use e.g. `*.theia.artemis.cit.tum.de`
+    - Make sure to note down the passphrase and download the private key
+2. Request Approval from RBG via mail
+3. Once approved, download the certificate files from harica.gr in PEM fullchain format
+4. Decrypt the privatekey using the passphrase provided during request
 
-1. Import certificate as secret
+    ```bash
+    openssl rsa -in theia.artemis.cit.tum.de.key.pem -out theia.artemis.cit.tum.de.key
+    ```
+
+5. Add the certificate and key to your the github environment secrets as described above
+
+Alternatively, you can also Manually Add the certificate to your cluster:
 
 ```bash
 k create secret tls static-theia-cert --cert=./wildcard-webview-cert/__webview_instance_theia_artemis_cit_tum_de.pem --key=./wildcard-webview-cert/wildcard_webview_instance_theia_artemis_cit_tum_de.key
 ```
-
-2. Make sure to set the `hosts.allWildcardInstances` and `ingress.instances.allWildcardSecretNames` accordingly.
 
 ## Add Keycloak Client Scopes
 
