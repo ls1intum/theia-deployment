@@ -24,9 +24,11 @@
 #   - THEIA_KEYCLOAK_CLIENT_SECRET: Keycloak client secret
 #
 # Parameters:
-#   - environment: GitHub environment name (e.g., theia-prod, theia-staging, test1)
-#   - namespace: Target Kubernetes namespace
-#   - helm_values_path: Path to environment-specific Helm values directory
+#   - environment: GitHub environment name (e.g., prod, staging, test1)
+#
+# Required Environment Variables (configured per GitHub Environment):
+#   - NAMESPACE: Target Kubernetes namespace
+#   - HELM_VALUES_PATH: Path to environment-specific Helm values directory
 # ==============================================================================
 
 name: Deploy Theia Cloud
@@ -35,15 +37,7 @@ on:
   workflow_call:
     inputs:
       environment:
-        description: 'Target environment (e.g., theia-prod, theia-staging, theia-test1)'
-        required: true
-        type: string
-      namespace:
-        description: 'Kubernetes namespace to deploy to'
-        required: true
-        type: string
-      helm_values_path:
-        description: 'Path to environment-specific Helm values (e.g., deployments/theia.artemis.cit.tum.de)'
+        description: "Target environment (e.g., prod, staging, test1)"
         required: true
         type: string
 
@@ -94,14 +88,14 @@ jobs:
           helm dependency update ./charts/theia-cloud-combined
 
           # Install base components (operator base, metrics, etc.)
-          helm upgrade theia-cloud-base theia-cloud-repo/theia-cloud-base --install -f ${{ inputs.helm_values_path }}/theia-base-helm-values.yml
+          helm upgrade theia-cloud-base theia-cloud-repo/theia-cloud-base --install -f ${{ vars.HELM_VALUES_PATH }}/theia-base-helm-values.yml
 
           # Install Custom Resource Definitions (CRDs) for Theia Cloud
-          helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install -f ${{ inputs.helm_values_path }}/theia-crds-helm-values.yml
+          helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install -f ${{ vars.HELM_VALUES_PATH }}/theia-crds-helm-values.yml
 
       # Step 5: Install the main Theia Cloud application with environment-specific configuration
       # This includes the operator, service, certificates, and app definitions
-      - name: Install Theia Cloud in namespace ${{ inputs.namespace }}
+      - name: Install Theia Cloud in namespace ${{ vars.NAMESPACE }}
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
         run: |
@@ -114,12 +108,9 @@ jobs:
           # --install: Create if it doesn't exist, upgrade if it does
           # --create-namespace: Create the namespace if it doesn't exist
           helm upgrade --install theia-cloud-combined ./charts/theia-cloud-combined \
-            --namespace ${{ inputs.namespace }} \
+            --namespace ${{ vars.NAMESPACE }} \
             --create-namespace \
-            -f ${{ inputs.helm_values_path }}/values.yaml \
+            -f ${{ vars.HELM_VALUES_PATH }}/values.yaml \
             --set theia-certificates.wildcardCertificate="$(cat wildcard.crt)" \
             --set theia-certificates.wildcardKey="$(cat wildcard.key)" \
-            --set theia-cloud.keycloak.cookieSecret="${{ secrets.THEIA_KEYCLOAK_COOKIE_SECRET }}" \
-            --set theia-cloud.keycloak.realm="${{ secrets.THEIA_KEYCLOAK_REALM }}" \
-            --set theia-cloud.keycloak.clientId="${{ secrets.THEIA_KEYCLOAK_CLIENT_ID }}" \
-            --set theia-cloud.keycloak.clientSecret="${{ secrets.THEIA_KEYCLOAK_CLIENT_SECRET }}"
+            --set theia-cloud.keycloak.cookieSecret="${{ secrets.THEIA_KEYCLOAK_COOKIE_SECRET }}"

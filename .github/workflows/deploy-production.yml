@@ -15,9 +15,9 @@
 #   Cannot be triggered automatically by any event
 #
 # Target:
-#   - Environment: theia-prod
+#   - Environment: prod
 #   - Cluster: Dedicated production cluster (separate from staging/test)
-#   - Namespace: theia-prod
+#   - Namespace: theia-prod (configured via NAMESPACE environment variable)
 #
 # Protection:
 #   IMPORTANT: Configure required approvers in GitHub Environment settings
@@ -46,9 +46,8 @@ on:
 jobs:
   deploy:
     name: Manual Production Deploy
+    # Environment variables NAMESPACE and HELM_VALUES_PATH are read from GitHub Environment settings
     uses: ./.github/workflows/deploy-theia.yml
     with:
-      environment: theia-prod
-      namespace: theia-prod
-      helm_values_path: deployments/theia.artemis.cit.tum.de
+      environment: prod
     secrets: inherit

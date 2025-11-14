@@ -87,6 +87,11 @@ The following environments are configured:
 
 For each environment, configure the following secrets and variables in GitHub Settings > Environments:
 
+**Environment Variables:**
+
+- `NAMESPACE`: Target Kubernetes namespace (e.g., `theia-prod`, `theia-staging`, `theia-test1`)
+- `HELM_VALUES_PATH`: Path to environment-specific Helm values directory (e.g., `deployments/theia.artemis.cit.tum.de`)
+
 **Secrets:**
 
 - `KUBECONFIG`: Kubernetes cluster configuration
@@ -99,8 +104,8 @@ For each environment, configure the following secrets and variables in GitHub Se
 
 **Environment Protection Rules:**
 
-- **theia-prod**: Require manual approval
-- **theia-staging**: No approval required (auto-deploy)
+- **prod**: Require manual approval
+- **staging**: No approval required (auto-deploy)
 - **test1**: Configure as needed (recommended: approval for team leads)
 
 ### Deployment Workflows
@@ -192,9 +197,25 @@ Also update:
    - Add required reviewers for approval gates
    - Set deployment branch rules
 
-#### 3. Configure Environment Secrets
+#### 3. Configure Environment Variables and Secrets
 
-In the newly created environment, add the following secrets:
+In the newly created environment, first add the required environment variables, then add the secrets:
+
+##### Required Environment Variables
+
+| Variable Name | Description | Example Value |
+|---------------|-------------|---------------|
+| `NAMESPACE` | Target Kubernetes namespace | `theia-test2` |
+| `HELM_VALUES_PATH` | Path to environment-specific Helm values directory | `deployments/test2.theia-test.artemis.cit.tum.de` |
+
+##### Environment Variable Creation Steps
+
+1. Navigate to **Settings > Environments > [your-environment]**
+2. Under **Environment variables**, click **Add variable**
+3. For each variable above:
+   - Enter the **Name** (exactly as shown in the table)
+   - Enter the **Value** (based on your environment configuration)
+   - Click **Add variable**
 
 ##### Required Secrets
 
@@ -235,8 +256,6 @@ Add the new environment to the PR deployment workflow:
    options:
      - test1
      - test2  # Add your new environment
-     - theia-staging
-     - theia-prod
    ```
 
 3. Add a new job for the environment:
@@ -245,13 +264,14 @@ Add the new environment to the PR deployment workflow:
    deploy-test2:
      if: github.event_name == 'workflow_dispatch' && inputs.environment == 'test2'
      name: Deploy to Test2
+     # Environment variables NAMESPACE and HELM_VALUES_PATH are read from GitHub Environment settings
      uses: ./.github/workflows/deploy-theia.yml
      with:
        environment: test2
-       namespace: theia-test2
-       helm_values_path: deployments/theia-test2.artemis.cit.tum.de
      secrets: inherit
    ```
+
+   Note: The `NAMESPACE` and `HELM_VALUES_PATH` are automatically read from the GitHub Environment variables you configured in step 3.
 
 #### 5. Test the Deployment
 

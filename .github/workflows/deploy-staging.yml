@@ -13,9 +13,9 @@
 #   Automatically runs on every push to the 'main' branch
 #
 # Target:
-#   - Environment: theia-staging
+#   - Environment: staging
 #   - Cluster: Shared staging/test cluster
-#   - Namespace: theia-staging
+#   - Namespace: theia-staging (configured via NAMESPACE environment variable)
 #
 # Protection:
 #   No approval required (set to auto-deploy for fast iteration)
@@ -36,9 +36,8 @@ on:
 jobs:
   deploy:
     name: Auto-deploy to Staging
+    # Environment variables NAMESPACE and HELM_VALUES_PATH are read from GitHub Environment settings
     uses: ./.github/workflows/deploy-theia.yml
     with:
-      environment: theia-staging
-      namespace: theia-staging
-      helm_values_path: deployments/theia-staging.artemis.cit.tum.de
+      environment: staging
     secrets: inherit

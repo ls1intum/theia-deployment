@@ -25,12 +25,11 @@ on:
 jobs:
   # Job 1: Deploy to Test1 environment
   # Runs automatically on all PR events OR when manually selected
+  # Environment variables NAMESPACE and HELM_VALUES_PATH are read from GitHub Environment settings
   deploy-test1:
     if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.environment == 'test1')
     name: Deploy to Test1
     uses: ./.github/workflows/deploy-theia.yml
     with:
       environment: test1
-      namespace: theia-test1
-      helm_values_path: deployments/theia-test1.artemis.cit.tum.de
     secrets: inherit
