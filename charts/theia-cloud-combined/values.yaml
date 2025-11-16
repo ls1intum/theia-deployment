@@ -9,6 +9,9 @@ hosts:
 theia-shared-cache:
   enabled: true
   replicas: 1
+  persistence:
+    size: 2Gi
+    storageClass: csi-rbd-sc
 
 theia-certificates:
   hosts:
