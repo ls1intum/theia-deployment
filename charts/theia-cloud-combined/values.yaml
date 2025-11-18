@@ -1,11 +1,3 @@
-# Global image tags for different image sources
-# These can be overridden via --set during helm upgrade
-imageTags:
-  # Tag for Theia Cloud infrastructure components (operator, service, landing-page)
-  theiaCloud: latest
-  # Tag for IDE images used in appdefinitions and preloading
-  ideImages: latest
-
 hosts:
   configuration:
     &hostsConfig # This is a YAML anchor for reusability and readability
