@@ -99,6 +99,7 @@ jobs:
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
         run: |
+          set -e
           # Add Prometheus community Helm repository
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm repo update
