@@ -21,6 +21,14 @@ on:
         type: choice
         options:
           - test1
+      theia_cloud_tag:
+        description: 'Theia Cloud components tag (operator, service, landing-page)'
+        required: false
+        default: 'latest'
+      ide_images_tag:
+        description: 'IDE images tag (appdefinitions and preloading)'
+        required: false
+        default: 'latest'
 
 jobs:
   # Job 1: Deploy to Test1 environment
@@ -32,4 +40,6 @@ jobs:
     uses: ./.github/workflows/deploy-theia.yml
     with:
       environment: test1
+      theia_cloud_tag: ${{ inputs.theia_cloud_tag || 'latest' }}
+      ide_images_tag: ${{ inputs.ide_images_tag || 'latest' }}
     secrets: inherit

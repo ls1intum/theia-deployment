@@ -1,3 +1,11 @@
+# Global image tags for different image sources
+# These can be overridden via --set during helm upgrade
+imageTags:
+  # Tag for Theia Cloud infrastructure components (operator, service, landing-page)
+  theiaCloud: latest
+  # Tag for IDE images used in appdefinitions and preloading
+  ideImages: latest
+
 hosts:
   configuration:
     &hostsConfig # This is a YAML anchor for reusability and readability
@@ -63,7 +71,7 @@ theia-cloud:
 
   landingPage:
     # We use the try now page as landing page since the default does not support mutliple apps -> https://github.com/eclipsesource/theia-cloud/discussions/301
-    image: ghcr.io/ls1intum/theia/landing-page
+    image: ghcr.io/ls1intum/theia/landing-page:latest
     # We can define a default blueprint
     appDefinition: "java-17-latest"
     ephemeralStorage: false
@@ -110,3 +118,8 @@ theia-cloud:
     # See https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview/
     # for how to generate a strong cookie secret.
     cookieSecret: "placeholder"
+
+# Configure the theia-appdefinitions subchart
+theia-appdefinitions:
+  # Pass down the IDE images tag from the global imageTags
+  imageTag: latest

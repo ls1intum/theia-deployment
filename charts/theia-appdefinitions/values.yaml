@@ -1,36 +1,40 @@
+# Global image tag for all IDE images
+# Can be overridden via parent chart or --set
+imageTag: latest
+
 apps:
   - name: java-17-latest
-    image: ghcr.io/ls1intum/theia/java-17:latest
+    imageName: ghcr.io/ls1intum/theia/java-17
     requestsMemory: 2000M
     requestsCpu: 500m
     limitsMemory: 2400M
 
   - name: c-latest
-    image: ghcr.io/ls1intum/theia/c:latest
+    imageName: ghcr.io/ls1intum/theia/c
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
 
   - name: javascript-latest
-    image: ghcr.io/ls1intum/theia/javascript:latest
+    imageName: ghcr.io/ls1intum/theia/javascript
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
 
   - name: ocaml-latest
-    image: ghcr.io/ls1intum/theia/ocaml:latest
+    imageName: ghcr.io/ls1intum/theia/ocaml
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
 
   - name: python-latest
-    image: ghcr.io/ls1intum/theia/python:latest
+    imageName: ghcr.io/ls1intum/theia/python
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
 
   - name: rust-latest
-    image: ghcr.io/ls1intum/theia/rust:latest
+    imageName: ghcr.io/ls1intum/theia/rust
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
