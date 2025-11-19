@@ -22,6 +22,7 @@ on:
         options:
           - test1
           - test2
+          - test3
 
 jobs:
   # Job 1: Deploy to Test1 environment
@@ -44,4 +45,15 @@ jobs:
     uses: ./.github/workflows/deploy-theia.yml
     with:
       environment: test2
+    secrets: inherit
+
+  # Job 3: Deploy to Test3 environment
+  # Runs automatically on all PR events OR when manually selected
+  # Environment variables NAMESPACE and HELM_VALUES_PATH are read from GitHub Environment settings
+  deploy-test3:
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.environment == 'test3')
+    name: Deploy to Test3
+    uses: ./.github/workflows/deploy-theia.yml
+    with:
+      environment: test3
     secrets: inherit
