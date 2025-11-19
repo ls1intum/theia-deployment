@@ -6,6 +6,13 @@ hosts:
     landing: theia
     instance: instance.theia
 
+theia-shared-cache:
+  enabled: true
+  replicas: 1
+  persistence:
+    size: 2Gi
+    storageClass: csi-rbd-sc
+
 theia-certificates:
   hosts:
     configuration: *hostsConfig
@@ -27,7 +34,7 @@ theia-cloud:
     clusterIssuer: letsencrypt-prod
     certManagerAnnotations: false
     instances:
-      allWildcardSecretNames: { "*.webview.": static-theia-cert }
+      allWildcardSecretNames: {"*.webview.": static-theia-cert}
 
   monitor:
     enable: true
