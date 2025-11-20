@@ -81,23 +81,23 @@ theia-cloud:
         label: Python
       rust-latest:
         label: Rust
-    infoTitle: "🚀 Welcome to Test3 IDE Environment - DEBUG"
-    infoText: "This is a testing environment for Theia Cloud. Select your programming language and start coding in seconds!- DEBUG"
-    loadingText: "⚡ Setting up your development workspace... - DEBUG"
+    infoTitle: "🚀 Welcome to Test3 IDE Environment"
+    infoText: "This is a testing environment for Theia Cloud. Select your programming language and start coding in seconds!"
+    loadingText: "⚡ Setting up your development workspace..."
     footerLinks:
       attribution:
-        text: "Built by TUM LS1 Team 👨‍💻 - DEBUG"
-        url: "https://support.apple.com/de-de/102520"
+        text: "Built by TUM LS1 Team 👨‍💻"
+        url: "https://aet.cit.tum.de/"
         version: "Test3-v1.0.0"
       bugReport:
-        text: "Report a bug 🐛 - DEBUG"
-        url: "https://support.apple.com/de-de/102520"
+        text: "Report a bug 🐛"
+        url: "https://github.com/ls1intum/theia-cloud/issues"
       featureRequest:
-        text: "Request a feature ✨ - DEBUG"
-        url: "https://support.apple.com/de-de/102520"
+        text: "Request a feature ✨"
+        url: "https://github.com/ls1intum/theia-cloud/issues"
       about:
-        text: "About Theia Cloud - DEBUG"
-        url: "https://support.apple.com/de-de/102520"
+        text: "About"
+        url: "https://ase-website-test.ase.cit.tum.de/"
 
   keycloak:
     enable: true
