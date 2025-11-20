@@ -1,0 +1,43 @@
+# ==============================================================================
+# Staging Auto-Deployment Workflow
+# ==============================================================================
+# This workflow automatically deploys to the staging environment whenever
+# changes are pushed to the main branch.
+#
+# Purpose:
+#   - Provide continuous deployment of main branch to staging
+#   - Enable rapid testing of merged changes before production
+#   - Maintain staging environment in sync with main branch
+#
+# Trigger:
+#   Automatically runs on every push to the 'main' branch
+#
+# Target:
+#   - Environment: staging
+#   - Cluster: Shared staging/test cluster
+#   - Namespace: theia-staging (configured via NAMESPACE environment variable)
+#
+# Protection:
+#   No approval required (set to auto-deploy for fast iteration)
+#   Configure approval gates in GitHub Environment settings if needed
+#
+# Note:
+#   This workflow shares the same Kubernetes cluster as test1 but uses
+#   a separate namespace for isolation. Production uses a different cluster.
+# ==============================================================================
+
+name: Deploy Staging
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Auto-deploy to Staging
+    # Environment variables NAMESPACE and HELM_VALUES_PATH are read from GitHub Environment settings
+    uses: ./.github/workflows/deploy-theia.yml
+    with:
+      environment: theia-staging
+    secrets: inherit

@@ -1,0 +1,53 @@
+# ==============================================================================
+# Production Manual Deployment Workflow
+# ==============================================================================
+# This workflow handles manual deployments to the production environment.
+# Production deployments are intentionally manual-only to ensure control
+# and oversight of production changes.
+#
+# Purpose:
+#   - Deploy to production environment only when explicitly triggered
+#   - Ensure human review and approval before production changes
+#   - Provide controlled deployment process for production
+#
+# Trigger:
+#   Manual only - via "Run workflow" button in GitHub Actions UI
+#   Cannot be triggered automatically by any event
+#
+# Target:
+#   - Environment: prod
+#   - Cluster: Dedicated production cluster (separate from staging/test)
+#   - Namespace: theia-prod (configured via NAMESPACE environment variable)
+#
+# Protection:
+#   IMPORTANT: Configure required approvers in GitHub Environment settings
+#   Recommended: Restrict to main branch deployments only
+#
+# Usage:
+#   1. Navigate to Actions > Deploy Production
+#   2. Click "Run workflow"
+#   3. Select the branch to deploy (typically 'main')
+#   4. Click "Run workflow"
+#   5. Wait for approval from designated reviewers
+#   6. Deployment will proceed after approval
+#
+# Security Notes:
+#   - Production uses a separate Kubernetes cluster from staging/test
+#   - Requires different KUBECONFIG in GitHub Environment secrets
+#   - Should have strict approval requirements in Environment settings
+#   - Consider restricting workflow permissions to specific users/teams
+# ==============================================================================
+
+name: Deploy Production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Manual Production Deploy
+    # Environment variables NAMESPACE and HELM_VALUES_PATH are read from GitHub Environment settings
+    uses: ./.github/workflows/deploy-theia.yml
+    with:
+      environment: theia-prod
+    secrets: inherit

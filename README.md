@@ -1,110 +1,204 @@
 # Theia Deployment
 
-## Install Theia Cloud
+This repository manages automated deployments of [Theia Cloud](https://github.com/eclipse-theia/theia-cloud) to Kubernetes clusters using GitHub Actions. Theia Cloud provides browser-based development environments, allowing students and developers to work in containerized IDEs without local setup.
+
+## What is This Repository?
+
+This repository serves as the infrastructure-as-code for deploying and managing Theia Cloud instances across multiple environments (production, staging, and testing). It provides:
+
+- **Automated CI/CD pipelines** for deploying Theia Cloud via GitHub Actions
+- **Environment-specific configurations** for production, staging, and test environments
+- **Custom Helm charts** for AppDefinitions, certificates, metrics, and combined deployments
+- **GitOps workflow** for managing deployments with approval gates and automated rollouts
+
+## Repository Structure
+
+```
+.
+├── .github/workflows/       # GitHub Actions workflows for automated deployment
+│   ├── deploy-theia.yml    # Reusable core deployment workflow
+│   ├── deploy-pr.yml       # PR-triggered test deployments
+│   ├── deploy-staging.yml  # Auto-deploy to staging on main push
+│   └── deploy-production.yml # Manual production deployments
+│
+├── deployments/            # Environment-specific Helm values
+│   ├── theia.artemis.cit.tum.de/              # Production config
+│   ├── theia-staging.artemis.cit.tum.de/      # Staging config
+│   └── test1.theia-test.artemis.cit.tum.de/   # Test environment config
+│
+├── charts/                 # Custom Helm charts
+│   ├── theia-cloud-combined/    # Combined chart with all components
+│   ├── theia-appdefinitions/    # Custom IDE environments (images/configs)
+│   ├── theia-certificates/      # SSL certificate management
+│   └── theia-metrics/           # Prometheus/Grafana dashboards
+│
+├── value-reference-files/  # Reference Helm values for different setups
+│
+└── docs/                   # Detailed documentation
+    ├── deployment-workflows.md  # How deployments work
+    ├── adding-environments.md   # Adding new environments
+    ├── keycloak-setup.md        # Authentication configuration
+    ├── tum-certificates.md      # TUM-specific SSL certificate process
+    └── monitoring-setup.md      # Prometheus & Grafana setup
+```
+
+## Deployment Architecture
+
+```
+┌───────────────────────────────────────────────────────────────┐
+│                      GitHub Actions Workflows                 │
+├───────────────────────────────────────────────────────────────┤
+│                                                               │
+│  ┌─────────────┐    ┌──────────────┐    ┌─────────────────┐   │
+│  │   PR Push   │    │ Push to main │    │ Manual Trigger  │   │
+│  │             │    │              │    │  (GitHub UI)    │   │
+│  └──────┬──────┘    └──────┬───────┘    └────────┬────────┘   │
+│         │                  │                     │            │
+│         ▼                  ▼                     ▼            │
+│  ┌─────────────┐    ┌──────────────┐    ┌─────────────────┐   │
+│  │deploy-pr.yml│    │deploy-staging│    │deploy-production│   │
+│  │             │    │    .yml      │    │     .yml        │   │
+│  └──────┬──────┘    └──────┬───────┘    └────────┬────────┘   │
+│         │                  │                     │            │
+│         └──────────────────┴─────────────────────┘            │
+│                            │                                  │
+│                            ▼                                  │
+│                  ┌──────────────────┐                         │
+│                  │  deploy-theia.yml│                         │
+│                  │ (Reusable Core)  │                         │
+│                  └────────┬─────────┘                         │
+│                           │                                   │
+└───────────────────────────┼───────────────────────────────────┘
+                            │
+            ┌───────────────┴───────────────┐
+            │                               │
+            ▼                               ▼
+┌───────────────────────────┐   ┌───────────────────────────┐
+│   Production Cluster      │   │  Staging/Test Cluster     │
+│   (Separate Kubeconfig)   │   │  (Shared Kubeconfig)      │
+├───────────────────────────┤   ├───────────────────────────┤
+│                           │   │                           │
+│  ┌─────────────────────┐  │   │  ┌─────────────────────┐  │
+│  │  theia-prod         │  │   │  │  theia-staging      │  │
+│  │  Manual Deploy      │  │   │  │  Auto on main       │  │
+│  │  (Approval Req.)    │  │   │  │  (No Approval)      │  │
+│  └─────────────────────┘  │   │  └─────────────────────┘  │
+│                           │   │                           │
+└───────────────────────────┘   │  ┌─────────────────────┐  │
+                                │  │  theia-test1        │  │
+                                │  │  Auto on PR         │  │
+                                │  │  (Approval Req.)    │  │
+                                │  └─────────────────────┘  │
+                                │                           │
+                                └───────────────────────────┘
+```
+
+**Deployment Triggers:**
+- **theia-prod**: Manual via GitHub UI with approval required
+- **theia-staging**: Automatic on push to `main` branch (no approval)
+- **test1**: Automatic on PR push with approval gate (configurable)
+
+## Environments
+
+| Environment | Namespace | Domain | Deployment Trigger | Approval Required |
+|------------|-----------|--------|-------------------|-------------------|
+| **Production** | `theia-prod` | `theia.artemis.cit.tum.de` | Manual (GitHub UI) | Yes |
+| **Staging** | `theia-staging` | `theia-staging.artemis.cit.tum.de` | Push to `main` | No |
+| **Test1** | `test1` | `test1.theia-test.artemis.cit.tum.de` | PR push | Yes (configurable) |
+
+Configuration files for each environment are located in the [deployments/](deployments/) directory.
+
+## Quick Start
 
 ### Prerequisites
 
-Theia Cloud requires a Kubernetes cluster with the following patch to the ingress-nginx controller to allow snippet annotations (also see [theia-cloud-helm](https://github.com/eclipse-theia/theia-cloud-helm/tree/main):
+- Kubernetes cluster with ingress-nginx controller
+- Helm 3.x installed
+- kubectl configured for your cluster
+- GitHub repository with appropriate secrets configured
+
+### Basic Installation
+
+1. **Prepare your cluster** (enable snippet annotations for ingress-nginx):
+   ```bash
+   kubectl -n ingress-nginx patch cm ingress-nginx-controller \
+     --patch '{"data":{"allow-snippet-annotations":"true","annotations-risk-level":"Critical"}}'
+   kubectl -n ingress-nginx delete pod -l app.kubernetes.io/name=ingress-nginx
+   ```
+
+2. **Install Theia Cloud base charts**:
+   ```bash
+   helm repo add theia-cloud-repo https://eclipse-theia.github.io/theia-cloud-helm/
+   helm repo update
+
+   helm upgrade theia-cloud-base theia-cloud-repo/theia-cloud-base --install \
+     -f deployments/your-environment/theia-base-helm-values.yml
+
+   helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install \
+     -f deployments/your-environment/theia-crds-helm-values.yml
+   ```
+
+3. **Install the combined Theia Cloud chart**:
+   ```bash
+   helm upgrade --install theia-cloud-combined ./charts/theia-cloud-combined \
+     --namespace your-namespace --create-namespace \
+     -f deployments/your-environment/values.yaml
+   ```
+
+### Using GitHub Actions for Deployment
+
+The recommended approach is to use the automated GitHub Actions workflows:
+
+1. **Configure GitHub Environment** with required secrets and variables (see [Adding Environments](docs/adding-environments.md))
+2. **Push to main** to deploy to staging automatically
+3. **Create a PR** to deploy to test environment with approval
+4. **Manually trigger production** deployment from GitHub Actions UI
+
+See [Deployment Workflows](docs/deployment-workflows.md) for detailed instructions.
+
+## Common Tasks
+
+- **Deploy a PR to test environment**: See [Deployment Workflows](docs/deployment-workflows.md#pull-request-deployments)
+- **Add a new environment**: See [Adding Environments](docs/adding-environments.md)
+- **Configure Keycloak authentication**: See [Keycloak Setup](docs/keycloak-setup.md)
+- **Request TUM wildcard certificates**: See [TUM Certificates](docs/tum-certificates.md)
+- **Set up monitoring**: See [Monitoring Setup](docs/monitoring-setup.md)
+
+## AppDefinitions
+
+*AppDefinitions* define the IDE environments that users work in. Custom AppDefinitions are built in a three-stage pipeline at [artemis-theia-blueprints](https://github.com/ls1intum/artemis-theia-blueprints).
+
+To install or update AppDefinitions:
 
 ```bash
-kubectl -n ingress-nginx patch cm ingress-nginx-controller --patch '{"data":{"allow-snippet-annotations":"true" "annotations-risk-level": "Critical" }}'
-kubectl -n ingress-nginx delete pod -l app.kubernetes.io/name=ingress-nginx
+helm dependency update ./charts/theia-cloud-combined
+helm upgrade --install theia-cloud-combined ./charts/theia-cloud-combined \
+  --namespace your-namespace --create-namespace \
+  -f deployments/your-environment/values.yaml
 ```
 
-### Install Theia Cloud Charts
+The AppDefinitions chart configuration is documented in [charts/theia-appdefinitions/templates/appdefinition.yaml](charts/theia-appdefinitions/templates/appdefinition.yaml).
 
-Make sure to set the namespace to your desired location first. For production, we use `theia-prod`.
+## Documentation
 
-```bash
-helm repo add theia-cloud-repo https://eclipse-theia.github.io/theia-cloud-helm/
-helm repo update
+Detailed documentation is available in the [docs/](docs/) directory:
 
-helm upgrade theia-cloud-base theia-cloud-repo/theia-cloud-base --install -f theia-base-helm-values.yml
+- [Deployment Workflows](docs/deployment-workflows.md) - How automated deployments work
+- [Adding Environments](docs/adding-environments.md) - Step-by-step guide to add new environments
+- [Keycloak Setup](docs/keycloak-setup.md) - Authentication and authorization configuration
+- [TUM Certificates](docs/tum-certificates.md) - TUM-specific SSL certificate process
+- [Monitoring Setup](docs/monitoring-setup.md) - Prometheus and Grafana installation
 
-helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install -f theia-crds-helm-values.yml
+## Related Projects
 
-helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace your-namespace --create-namespace
-```
+- [Theia Cloud](https://github.com/eclipse-theia/theia-cloud) - Main Theia Cloud project
+- [Theia Cloud Helm Charts](https://github.com/eclipse-theia/theia-cloud-helm) - Official Helm charts
+- [Artemis Theia Blueprints](https://github.com/ls1intum/artemis-theia-blueprints) - Custom IDE images and configurations
+- [Theia Cloud Observability](https://github.com/eclipsesource/theia-cloud-observability) - Monitoring and observability
 
-### Installing the Theia Cloud Test Operator
+## Support
 
-To install the theia cloud test operator, we use the specific yaml file. For other environments, it makes sense to also create a new values file.
-
-```bash
-helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace $namespace --create-namespace -f tum-theia-cloud-helm-test-values.yaml
-```
-
-## Certificate System
-
-Theia creates a new URI for each session<>plugin combination in the namespace of `*.webview.instance.theia.artemis.cit.tum.de`. Thus, a wildcard certificate is required granting the server the authority to securely handle this namespace.
-Our certificates are externally signed by RBG and cannot be renewed nor used by the regular K8s `cert-manager` - we disable it using `ingress.certManagerAnnotations: false` in the helm values.
-
-### Install the *.webview... certificate from TUM
-
-1. Import certificate as secret
-
-```bash
-k create secret tls static-theia-cert --cert=./wildcard-webview-cert/__webview_instance_theia_artemis_cit_tum_de.pem --key=./wildcard-webview-cert/wildcard_webview_instance_theia_artemis_cit_tum_de.key
-```
-
-2. Make sure to set the `hosts.allWildcardInstances` and `ingress.instances.allWildcardSecretNames` accordingly.
-
-## Add Keycloak Client Scopes
-
-Go to Keycloak realm > Clients > theia-cloud > Client Scopes > theia-dedicated > Mappers and add the following mappers:
-
-![Keycloak Client Scopes](docs/images/keycloak_client_scopes.png)
-
-- username
-
-![Username Mapper](docs/images/keycloak_client_scope_username.png)
-
-- audience
-
-![Audience Mapper](docs/images/keycloak_client_scope_audience.png)
-
-- groups
-
-![Groups Mapper](docs/images/keycloak_client_scope_groups.png)
-
-## Enable Metrics for Theia
-
-The installation of the metrics system is based on the[Theia Cloud Observability](https://github.com/eclipsesource/theia-cloud-observability) project.
-
-### Install Prometheus & Grafana
-
-Based on [this instructions](https://github.com/eclipsesource/theia-cloud-observability/blob/main/kube-prometheus-stack/README.md), we perform the following steps:
-
-1. Configure the system in `theia-prometheus-values.yml`. Make sure to set an appropriate password and adjust the domains.
-
-2. Add repository to install prometheus.
-
-```bash
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-```
-
-3. Install in wanted namespace
-
-```bash
-helm upgrade theia-prometheus-stack prometheus-community/kube-prometheus-stack \
---version 60.2.0 --namespace theia-prometheus-stack --create-namespace --install \
---values theia-prometheus-values.yaml
-```
-
-### Install Theia dashboards
-
-The manifests assume default namespaces for both the Theia Cloud and the Prometheus installations. If those namespaces do not match your installation, you have to adapt the manifests.
-Follow [these instructions](https://github.com/eclipsesource/theia-cloud-observability/blob/main/kube-prometheus-stack/README.md#installupgrade-additional-manifests) to change the manifests available in the `theia-metrics` directory.
-
-Finally, create the new dashboard: `kubectl apply -f theia-metrics/manifests`.
-
-## Install Custom AppDefinitions
-
-In Theia, *AppDefinition*s are used to define the environment the students work in. They are build in a compley three-stages pipeline [here](https://github.com/ls1intum/artemis-theia-blueprints).
-To install them, we use a simplified HelmChart - more configuration is possible and documented-in-code in `./theia-appdefinitions/templates/appdefinition.yaml`. To apply changes to your cluster, run:
-
-```bash
-helm dependency update ./tum-theia-cloud
-helm upgrade --install tum-theia-cloud ./tum-theia-cloud --namespace your-namespace --create-namespace -f your-custom-values.yaml
-```
+For issues or questions:
+- Check the [documentation](docs/)
+- Review existing [GitHub Issues](../../issues)
+- Consult the [Theia Cloud documentation](https://theia-cloud.io/)
