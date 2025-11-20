@@ -13,6 +13,8 @@ spec:
     matchNames:
       - theia-prod
       - test1
+      - test2
+      - test3
       - theia-staging
       - theia-test
   podMetricsEndpoints:
