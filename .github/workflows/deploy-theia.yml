@@ -139,4 +139,4 @@ jobs:
             --set "theia-cloud.preloading.images[4]=ghcr.io/ls1intum/theia/ocaml:${IDE_IMAGES_TAG}" \
             --set "theia-cloud.preloading.images[5]=ghcr.io/ls1intum/theia/rust:${IDE_IMAGES_TAG}" \
             --set "theia-cloud.preloading.images[6]=ghcr.io/ls1intum/theia/python:${IDE_IMAGES_TAG}" \
-            --set theia-appdefinitions.imageTag="${IDE_IMAGES_TAG}"
+            --set theia-appdefinitions.defaultImageTag="${IDE_IMAGES_TAG}"

@@ -1,40 +1,47 @@
-# Global image tag for all IDE images
+# Global default image tag for all IDE images
+# Used as fallback when individual apps don't specify their own imageTag
 # Can be overridden via parent chart or --set
-imageTag: latest
+defaultImageTag: latest
 
 apps:
   - name: java-17-latest
     imageName: ghcr.io/ls1intum/theia/java-17
+    # imageTag: latest  # Optional: override defaultImageTag for this app
     requestsMemory: 2000M
     requestsCpu: 500m
     limitsMemory: 2400M
 
   - name: c-latest
     imageName: ghcr.io/ls1intum/theia/c
+    # imageTag: latest  # Optional: override defaultImageTag for this app
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
 
   - name: javascript-latest
     imageName: ghcr.io/ls1intum/theia/javascript
+    # imageTag: latest  # Optional: override defaultImageTag for this app
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
 
   - name: ocaml-latest
     imageName: ghcr.io/ls1intum/theia/ocaml
+    # imageTag: latest  # Optional: override defaultImageTag for this app
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
 
   - name: python-latest
     imageName: ghcr.io/ls1intum/theia/python
+    # imageTag: latest  # Optional: override defaultImageTag for this app
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
 
   - name: rust-latest
     imageName: ghcr.io/ls1intum/theia/rust
+    # imageTag: latest  # Optional: override defaultImageTag for this app
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M

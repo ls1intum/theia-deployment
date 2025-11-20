@@ -113,5 +113,13 @@ theia-cloud:
 
 # Configure the theia-appdefinitions subchart
 theia-appdefinitions:
-  # Pass down the IDE images tag from the global imageTags
-  imageTag: latest
+  # Default image tag for all app definitions (can be overridden per app)
+  defaultImageTag: latest
+  # Individual apps can override the tag in their definition, e.g.:
+  # apps:
+  #   - name: java-17-v1
+  #     imageName: ghcr.io/ls1intum/theia/java-17
+  #     imageTag: v1.0.0
+  #   - name: python-v2
+  #     imageName: ghcr.io/ls1intum/theia/python
+  #     imageTag: v2.0.0
