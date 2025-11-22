@@ -78,7 +78,7 @@ landingPage:
       attribution:
         text: "Built by TUM LS1 Team 👨‍💻"
         url: "https://aet.cit.tum.de/"
-        version: "Test2-v1.0.0"
+        version: "v1.0.0"
       bugReport:
         text: "Report a bug 🐛"
         url: "https://github.com/ls1intum/theia-cloud/issues"
