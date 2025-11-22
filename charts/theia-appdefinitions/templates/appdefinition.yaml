@@ -6,7 +6,7 @@ metadata:
   name: {{ .name }}
 spec:
   name: {{ .name }}
-  image: {{ .imageName | default "ghcr.io/ls1intum/theia/default" }}:{{ .imageTag | default $.Values.defaultImageTag | default "latest" }}
+  image: {{ .image | default "ghcr.io/ls1intum/theia/default" }}:{{ .imageTag | default $.Values.defaultImageTag | default "latest" }}
   uid: {{ .uid | default 101 }}
   port: {{ .port | default 3000 }}
   ingressname: {{ .ingressname | default "theia-cloud-demo-ws-ingress" }}
