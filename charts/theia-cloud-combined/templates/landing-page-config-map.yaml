@@ -94,4 +94,3 @@ binaryData:
   {{- if (index .Values "theia-cloud" "landingPage" "logoData") }}
   logo.{{ $logoFileExtension }}: {{ (index .Values "theia-cloud" "landingPage" "logoData") }}
   {{- end }}
-
