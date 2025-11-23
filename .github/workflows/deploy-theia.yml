@@ -103,7 +103,31 @@ jobs:
           # Install Custom Resource Definitions (CRDs) for Theia Cloud
           helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install -f ${{ vars.HELM_VALUES_PATH }}/theia-crds-helm-values.yml
 
-      # Step 5: Install the main Theia Cloud application with environment-specific configuration
+      # Step 5: Install / upgrade Prometheus & Grafana monitoring stack (kube-prometheus-stack)
+      # based on configuration from the theia-cloud-observability repository (adapted into this repo).
+      - name: Install Theia Cloud monitoring stack (kube-prometheus-stack)
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+        run: |
+          set -e
+          # Add Prometheus community Helm repository
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm repo update
+
+          # Install / upgrade kube-prometheus-stack with our preconfigured values
+          # Release name: theia-prometheus-stack
+          # Namespace: theia-prometheus-stack
+          helm upgrade theia-prometheus-stack prometheus-community/kube-prometheus-stack \
+            --install \
+            --version 60.2.0 \
+            --namespace theia-prometheus-stack \
+            --create-namespace \
+            --values value-reference-files/theia-prometheus-values.yaml
+
+          # Install / upgrade additional manifests: Theia Cloud dashboard & PodMonitors
+          kubectl apply -f charts/theia-metrics/manifests
+
+      # Step 6: Install the main Theia Cloud application with environment-specific configuration
       # This includes the operator, service, certificates, and app definitions
       - name: Install Theia Cloud in namespace ${{ vars.NAMESPACE }}
         env:
