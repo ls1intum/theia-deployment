@@ -126,6 +126,6 @@ monitoring:
   # Should be overridden in deployment-specific values.yaml files
   targetNamespaces: []
   
-  # -- List of namespaces to monitor for Theia session pods  
+  # -- List of namespaces to monitor for Theia session pods
   # Should be overridden in deployment-specific values.yaml files
   sessionNamespaces: []

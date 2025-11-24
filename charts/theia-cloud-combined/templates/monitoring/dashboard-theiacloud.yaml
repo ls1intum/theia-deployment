@@ -95,7 +95,7 @@ data:
               "datasource": { "type": "prometheus", "uid": "prometheus" },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "count(up{job=~\"cattle-monitoring-system/.*theiacloud-sessions\"})",
+              "expr": "count(up{namespace=\"$namespace\", job=~\"cattle-monitoring-system/.*theiacloud-sessions\"})",
               "format": "time_series",
               "instant": false,
               "interval": "",
@@ -234,7 +234,7 @@ data:
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
               "editorMode": "code",
-              "expr": "process_virtual_memory_bytes{namespace=\"$namespace\", job=~\"cattle-monitoring-system/.*theiacloud-sessions\"}",
+              "expr": "process_virtual_memory_bytes{namespace=\"$namespace\"}",
               "instant": false,
               "legendFormat": "{{ "{{" }}pod{{ "}}" }}",
               "range": true,
