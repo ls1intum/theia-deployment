@@ -236,7 +236,7 @@ data:
               "editorMode": "code",
               "expr": "process_virtual_memory_bytes{namespace=\"theia-prod\", job=~\"cattle-monitoring-system/.*theiacloud-sessions\"}",
               "instant": false,
-              "legendFormat": "{{pod}}",
+              "legendFormat": "{{ "{{" }}pod{{ "}}" }}",
               "range": true,
               "refId": "A"
             }
@@ -301,7 +301,7 @@ data:
               "expr": "rate(process_cpu_seconds_total{namespace=\"theia-prod\"}[1m])",
               "instant": false,
               "interval": "",
-              "legendFormat": "{{pod}}",
+              "legendFormat": "{{ "{{" }}pod{{ "}}" }}",
               "range": true,
               "refId": "Theia Backend CPU"
             }
@@ -373,7 +373,7 @@ data:
               "editorMode": "code",
               "expr": "instance:node_cpu:ratio",
               "instant": false,
-              "legendFormat": "Node {{instance}}",
+              "legendFormat": "Node {{ "{{" }}instance{{ "}}" }}",
               "range": true,
               "refId": "A"
             }
