@@ -160,7 +160,7 @@ data:
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
               "editorMode": "code",
-              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\",container!=\"\", job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"theia-prod\"}[1m])) by (pod)",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\",container!=\"\", job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"$namespace\"}[1m])) by (pod)",
               "instant": false,
               "legendFormat": "__auto",
               "range": true,
@@ -169,7 +169,7 @@ data:
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
               "editorMode": "code",
-              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\",container!=\"\", job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"theia-prod\"}[1m]))",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\",container!=\"\", job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"$namespace\"}[1m]))",
               "hide": false,
               "instant": false,
               "legendFormat": "TOTAL",
@@ -234,7 +234,7 @@ data:
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
               "editorMode": "code",
-              "expr": "process_virtual_memory_bytes{namespace=\"theia-prod\", job=~\"cattle-monitoring-system/.*theiacloud-sessions\"}",
+              "expr": "process_virtual_memory_bytes{namespace=\"$namespace\", job=~\"cattle-monitoring-system/.*theiacloud-sessions\"}",
               "instant": false,
               "legendFormat": "{{ "{{" }}pod{{ "}}" }}",
               "range": true,
@@ -298,7 +298,7 @@ data:
               "datasource": { "type": "prometheus", "uid": "prometheus" },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "rate(process_cpu_seconds_total{namespace=\"theia-prod\"}[1m])",
+              "expr": "rate(process_cpu_seconds_total{namespace=\"$namespace\"}[1m])",
               "instant": false,
               "interval": "",
               "legendFormat": "{{ "{{" }}pod{{ "}}" }}",
@@ -585,7 +585,31 @@ data:
       "refresh": "30s",
       "schemaVersion": 39,
       "tags": [],
-      "templating": { "list": [] },
+      "templating": {
+        "list": [
+          {
+            "current": { "selected": false, "text": "theia-prod", "value": "theia-prod" },
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "definition": "label_values(process_cpu_seconds_total,namespace)",
+            "hide": 0,
+            "includeAll": false,
+            "label": "Namespace",
+            "multi": false,
+            "name": "namespace",
+            "options": [],
+            "query": {
+              "qryType": 1,
+              "query": "label_values(process_cpu_seconds_total,namespace)",
+              "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query"
+          }
+        ]
+      },
       "time": { "from": "now-3h", "to": "now" },
       "timeRangeUpdatedDuringEditOrView": false,
       "timepicker": {},
