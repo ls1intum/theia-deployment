@@ -95,7 +95,7 @@ data:
               "datasource": { "type": "prometheus", "uid": "prometheus" },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "count(up{namespace=\"$namespace\", job=~\"cattle-monitoring-system/.*theiacloud-sessions\"})",
+              "expr": "count(count by (pod) (process_cpu_seconds_total{namespace=\"$namespace\", pod=~\"session-.*\"}))",
               "format": "time_series",
               "instant": false,
               "interval": "",
