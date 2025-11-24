@@ -1,0 +1,20 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: theia-cloud-service
+  namespace: {{ .Values.monitoring.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: service
+  namespaceSelector:
+    matchNames:
+      {{- range .Values.monitoring.targetNamespaces }}
+      - {{ . }}
+      {{- end }}
+  podMetricsEndpoints:
+    - port: http
+      interval: 15s
+      path: /q/metrics
+{{- end }}

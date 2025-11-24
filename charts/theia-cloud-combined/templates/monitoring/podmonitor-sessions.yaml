@@ -1,0 +1,26 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: theia-cloud-sessions
+  namespace: {{ .Values.monitoring.namespace }}
+spec:
+  selector:
+    matchExpressions:
+      - key: app
+        operator: NotIn
+        values:
+          - conversion-webhook
+          - landing-page
+          - operator
+          - service
+  namespaceSelector:
+    matchNames:
+      {{- range .Values.monitoring.sessionNamespaces }}
+      - {{ . }}
+      {{- end }}
+  podMetricsEndpoints:
+    - port: application
+      interval: 15s
+{{- end }}
+
