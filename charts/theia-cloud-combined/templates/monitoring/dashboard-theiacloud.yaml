@@ -588,25 +588,22 @@ data:
       "templating": {
         "list": [
           {
-            "current": { "selected": false, "text": "theia-prod", "value": "theia-prod" },
-            "datasource": { "type": "prometheus", "uid": "prometheus" },
-            "definition": "label_values(process_cpu_seconds_total,namespace)",
+            "current": { "selected": false, "text": "theia", "value": "theia" },
             "hide": 0,
             "includeAll": false,
             "label": "Namespace",
             "multi": false,
             "name": "namespace",
-            "options": [],
-            "query": {
-              "qryType": 1,
-              "query": "label_values(process_cpu_seconds_total,namespace)",
-              "refId": "PrometheusVariableQueryEditor-VariableQuery"
-            },
-            "refresh": 1,
-            "regex": "",
+            "options": [
+              { "selected": true, "text": "theia", "value": "theia" },
+              { "selected": false, "text": "theia-staging", "value": "theia-staging" },
+              { "selected": false, "text": "test1", "value": "test1" },
+              { "selected": false, "text": "test2", "value": "test2" },
+              { "selected": false, "text": "test3", "value": "test3" }
+            ],
+            "query": "theia,theia-staging,test1,test2,test3",
             "skipUrlSync": false,
-            "sort": 0,
-            "type": "query"
+            "type": "custom"
           }
         ]
       },
