@@ -123,14 +123,9 @@ monitoring:
   dashboardNamespace: cattle-dashboards
   
   # -- List of namespaces to monitor for Theia Cloud service pods
-  targetNamespaces:
-    - theia
-    - test1
-    - test2
-    - test3
-    - theia-staging
+  # Should be overridden in deployment-specific values.yaml files
+  targetNamespaces: []
   
-  # -- List of namespaces to monitor for Theia session pods
-  sessionNamespaces:
-    - theia
-    - theia-staging
+  # -- List of namespaces to monitor for Theia session pods  
+  # Should be overridden in deployment-specific values.yaml files
+  sessionNamespaces: []
