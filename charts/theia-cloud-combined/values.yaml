@@ -5,6 +5,7 @@ hosts:
     service: service.theia
     landing: theia
     instance: instance.theia
+    cache: cache.theia
 
 theia-shared-cache:
   enabled: true
