@@ -11,6 +11,13 @@ theia-certificates:
   hosts:
     configuration: *hostsConfig
 
+theia-shared-cache:
+  enabled: true
+  ui:
+    enabled: true
+  hosts:
+    configuration: *hostsConfig
+
 theia-cloud:
   app:
     id: nJV3nKZmpxTD4wu2
