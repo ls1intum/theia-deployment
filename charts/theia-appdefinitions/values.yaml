@@ -4,33 +4,45 @@ apps:
     requestsMemory: 2000M
     requestsCpu: 500m
     limitsMemory: 2400M
+    minInstances: 1
+    maxInstances: 1000
 
   - name: c-latest
     image: ghcr.io/ls1intum/theia/c:latest
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
+    minInstances: 1
+    maxInstances: 1000
 
   - name: javascript-latest
     image: ghcr.io/ls1intum/theia/javascript:latest
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
+    minInstances: 1
+    maxInstances: 1000
 
   - name: ocaml-latest
     image: ghcr.io/ls1intum/theia/ocaml:latest
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
+    minInstances: 1
+    maxInstances: 1000
 
   - name: python-latest
     image: ghcr.io/ls1intum/theia/python:latest
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
+    minInstances: 1
+    maxInstances: 1000
 
   - name: rust-latest
     image: ghcr.io/ls1intum/theia/rust:latest
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
+    minInstances: 1
+    maxInstances: 1000
