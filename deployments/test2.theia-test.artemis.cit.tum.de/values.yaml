@@ -17,6 +17,13 @@ theia-shared-cache:
     enabled: true
   hosts:
     configuration: *hostsConfig
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: 0.5
+    limits:
+      memory: "10Gi"
+      cpu: 1.5
 
 theia-cloud:
   app:
