@@ -5,6 +5,7 @@ hosts:
     service: service.test2
     landing: test2
     instance: instance.test2
+    cache: cache.test2
 
 theia-certificates:
   hosts:
@@ -27,7 +28,7 @@ theia-cloud:
     clusterIssuer: letsencrypt-prod
     certManagerAnnotations: false
     instances:
-      allWildcardSecretNames: { "*.webview.": static-theia-cert }
+      allWildcardSecretNames: {"*.webview.": static-theia-cert}
 
   monitor:
     enable: true

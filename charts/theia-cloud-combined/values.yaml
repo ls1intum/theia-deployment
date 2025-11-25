@@ -14,7 +14,8 @@ theia-shared-cache:
     storageClass: csi-rbd-sc
   ui:
     enabled: true
-    host: "theia-shared-cache.theia.artemis.cit.tum.de"
+  hosts:
+    configuration: *hostsConfig
 
 theia-certificates:
   hosts:
