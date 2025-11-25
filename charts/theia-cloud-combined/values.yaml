@@ -12,6 +12,9 @@ theia-shared-cache:
   persistence:
     size: 2Gi
     storageClass: csi-rbd-sc
+  ui:
+    enabled: true
+    host: "theia-shared-cache.theia.artemis.cit.tum.de"
 
 theia-certificates:
   hosts:
