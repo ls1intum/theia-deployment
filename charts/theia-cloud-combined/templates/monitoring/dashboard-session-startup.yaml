@@ -1,10 +1,11 @@
+{{- if .Values.monitoring.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
     grafana_dashboard: "1"
-  name: dashboard-session-startup
-  namespace: theia-prometheus-stack
+  name: theia-cloud-dashboard-session-startup
+  namespace: {{ .Values.monitoring.dashboardNamespace }}
 data:
   session-startup.json: |-
     {
@@ -82,7 +83,7 @@ data:
               "expr": "rate(application_application_theiacloud_session_startup_seconds_seconds_sum{namespace=\"$namespace\"}[5m]) \n/ \nrate(application_application_theiacloud_session_startup_seconds_seconds_count{namespace=\"$namespace\"}[5m])",
               "instant": false,
               "interval": "",
-              "legendFormat": "{{app_definition}}",
+              "legendFormat": "{{ "{{" }}app_definition{{ "}}" }}",
               "range": true,
               "refId": "A"
             }
@@ -144,7 +145,7 @@ data:
               "editorMode": "code",
               "expr": "application_application_theiacloud_session_startup_seconds_seconds{namespace=\"$namespace\", quantile=\"0.5\"}",
               "instant": false,
-              "legendFormat": "{{app_definition}}",
+              "legendFormat": "{{ "{{" }}app_definition{{ "}}" }}",
               "range": true,
               "refId": "A"
             }
@@ -206,7 +207,7 @@ data:
               "editorMode": "code",
               "expr": "application_application_theiacloud_session_startup_seconds_seconds{namespace=\"$namespace\", quantile=\"0.95\"}",
               "instant": false,
-              "legendFormat": "{{app_definition}}",
+              "legendFormat": "{{ "{{" }}app_definition{{ "}}" }}",
               "range": true,
               "refId": "A"
             }
@@ -268,7 +269,7 @@ data:
               "editorMode": "code",
               "expr": "application_application_theiacloud_session_startup_seconds_seconds{namespace=\"$namespace\", quantile=\"0.99\"}",
               "instant": false,
-              "legendFormat": "{{app_definition}}",
+              "legendFormat": "{{ "{{" }}app_definition{{ "}}" }}",
               "range": true,
               "refId": "A"
             }
@@ -314,4 +315,4 @@ data:
       "version": 8,
       "weekStart": ""
     }
-
+{{- end }}

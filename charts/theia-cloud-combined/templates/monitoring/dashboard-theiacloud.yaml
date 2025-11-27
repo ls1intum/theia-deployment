@@ -1,10 +1,11 @@
+{{- if .Values.monitoring.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
     grafana_dashboard: "1"
-  name: dashboard-theiacloud
-  namespace: theia-prometheus-stack
+  name: theia-cloud-dashboard-overview
+  namespace: {{ .Values.monitoring.dashboardNamespace }}
 data:
   theiacloud.json: |-
     {
@@ -94,7 +95,7 @@ data:
               "datasource": { "type": "prometheus", "uid": "prometheus" },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "count(up{job=\"theia-prometheus-stack/theiacloud-sessions\"})",
+              "expr": "count(count by (pod) (process_cpu_seconds_total{namespace=\"$namespace\", pod=~\"session-.*\"}))",
               "format": "time_series",
               "instant": false,
               "interval": "",
@@ -159,7 +160,7 @@ data:
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
               "editorMode": "code",
-              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\",container!=\"\", job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"theia-prod\"}[1m])) by (pod)",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\",container!=\"\", job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"$namespace\"}[1m])) by (pod)",
               "instant": false,
               "legendFormat": "__auto",
               "range": true,
@@ -168,7 +169,7 @@ data:
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
               "editorMode": "code",
-              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\",container!=\"\", job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"theia-prod\"}[1m]))",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\",container!=\"\", job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"$namespace\"}[1m]))",
               "hide": false,
               "instant": false,
               "legendFormat": "TOTAL",
@@ -233,9 +234,9 @@ data:
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
               "editorMode": "code",
-              "expr": "process_virtual_memory_bytes{namespace=\"theia-prod\", job=\"theia-prometheus-stack/theiacloud-sessions\"}",
+              "expr": "process_virtual_memory_bytes{namespace=\"$namespace\"}",
               "instant": false,
-              "legendFormat": "{{pod}}",
+              "legendFormat": "{{ "{{" }}pod{{ "}}" }}",
               "range": true,
               "refId": "A"
             }
@@ -297,10 +298,10 @@ data:
               "datasource": { "type": "prometheus", "uid": "prometheus" },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "rate(process_cpu_seconds_total{namespace=\"theia-prod\"}[1m])",
+              "expr": "rate(process_cpu_seconds_total{namespace=\"$namespace\"}[1m])",
               "instant": false,
               "interval": "",
-              "legendFormat": "{{pod}}",
+              "legendFormat": "{{ "{{" }}pod{{ "}}" }}",
               "range": true,
               "refId": "Theia Backend CPU"
             }
@@ -372,7 +373,7 @@ data:
               "editorMode": "code",
               "expr": "instance:node_cpu:ratio",
               "instant": false,
-              "legendFormat": "Node {{instance}}",
+              "legendFormat": "Node {{ "{{" }}instance{{ "}}" }}",
               "range": true,
               "refId": "A"
             }
@@ -584,7 +585,28 @@ data:
       "refresh": "30s",
       "schemaVersion": 39,
       "tags": [],
-      "templating": { "list": [] },
+      "templating": {
+        "list": [
+          {
+            "current": { "selected": false, "text": "theia", "value": "theia" },
+            "hide": 0,
+            "includeAll": false,
+            "label": "Namespace",
+            "multi": false,
+            "name": "namespace",
+            "options": [
+              { "selected": true, "text": "theia", "value": "theia" },
+              { "selected": false, "text": "theia-staging", "value": "theia-staging" },
+              { "selected": false, "text": "test1", "value": "test1" },
+              { "selected": false, "text": "test2", "value": "test2" },
+              { "selected": false, "text": "test3", "value": "test3" }
+            ],
+            "query": "theia,theia-staging,test1,test2,test3",
+            "skipUrlSync": false,
+            "type": "custom"
+          }
+        ]
+      },
       "time": { "from": "now-3h", "to": "now" },
       "timeRangeUpdatedDuringEditOrView": false,
       "timepicker": {},
@@ -594,4 +616,4 @@ data:
       "version": 7,
       "weekStart": ""
     }
-
+{{- end }}
