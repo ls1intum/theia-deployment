@@ -123,3 +123,22 @@ theia-appdefinitions:
   #   - name: python-v2
   #     image: ghcr.io/ls1intum/theia/python
   #     imageTag: v2.0.0
+
+# Monitoring configuration for Rancher native monitoring stack
+monitoring:
+  # -- Enable monitoring resources (PodMonitors and Grafana Dashboards)
+  enabled: true
+  
+  # -- Namespace where PodMonitors should be created (must match where Prometheus can discover them)
+  namespace: cattle-monitoring-system
+  
+  # -- Namespace where Grafana dashboards should be created (must have grafana_dashboard: "1" label discovery)
+  dashboardNamespace: cattle-dashboards
+  
+  # -- List of namespaces to monitor for Theia Cloud service pods
+  # Should be overridden in deployment-specific values.yaml files
+  targetNamespaces: []
+  
+  # -- List of namespaces to monitor for Theia session pods
+  # Should be overridden in deployment-specific values.yaml files
+  sessionNamespaces: []
