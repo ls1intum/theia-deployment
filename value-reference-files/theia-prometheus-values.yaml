@@ -112,7 +112,3 @@ grafana:
     - secretName: grafana-general-tls
       hosts:
       - metrics.theia.artemis.cit.tum.de
-
-# The alertmanager is disabled as there are errors during container startup in our setup.
-alertmanager:
-  enabled: false
