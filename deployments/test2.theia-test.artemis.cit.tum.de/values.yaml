@@ -7,6 +7,14 @@ hosts:
     instance: instance.test2
     cache: cache.test2
 
+theia-appdefinitions:
+  apps:
+    - name: java-17-latest
+      image: ghcr.io/ls1intum/theia/java-17:pr-49
+      requestsMemory: 2000M
+      requestsCpu: 500m
+      limitsMemory: 2400M
+
 theia-certificates:
   hosts:
     configuration: *hostsConfig
