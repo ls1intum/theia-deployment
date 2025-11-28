@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: operator-deployment
+  labels:
+    app: operator
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ tpl (.Values.operator.replicas | toString) . }}
+  selector:
+    matchLabels:
+      app: operator
+  template:
+    metadata:
+      labels:
+        app: operator
+      {{- if .Values.operator.logging.override }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/operator-configmap-logging.yaml") . | sha256sum }}
+      {{- end }}
+    spec:
+      # we need to be able to create and read operators
+      automountServiceAccountToken: true
+      serviceAccountName: operator-api-service-account
+      containers:
+      - name: operator-container
+        image: {{ tpl (.Values.operator.image | toString) . }}
+        imagePullPolicy: {{ if .Values.operator.imagePullPolicy }}{{ tpl (.Values.operator.imagePullPolicy | toString) . }}{{ else }}{{ tpl (.Values.imagePullPolicy | toString) . }}{{ end }}
+        args:
+          {{- if .Values.keycloak.enable }}
+          - "--keycloak"
+          - "--keycloakURL"
+          - "{{ tpl (.Values.keycloak.authUrl | toString) . }}"
+          - "--keycloakRealm"
+          - "{{ tpl (.Values.keycloak.realm | toString) . }}"
+          - "--keycloakClientId"
+          - "{{ tpl (.Values.keycloak.clientId | toString) . }}"
+          {{- end }}
+          {{ if .Values.operator.eagerStart }}- "--eagerStart"{{ end }}
+          - "--cloudProvider"
+          - {{ tpl (.Values.operator.cloudProvider | toString) . }}
+          - "--bandwidthLimiter"
+          - {{ tpl (.Values.operator.bandwidthLimiter | toString) . }}
+          - "--wondershaperImage"
+          - {{ tpl (.Values.operator.wondershaperImage | toString) . }}
+          - "--serviceUrl"
+          {{- if .Values.hosts.usePaths }}
+          - {{ tpl (.Values.service.protocol | toString) . }}://{{ tpl (.Values.hosts.configuration.baseHost | toString) . }}/{{ tpl (.Values.hosts.configuration.service | toString) . }}
+          {{- else}}
+          - {{ tpl (.Values.service.protocol | toString) . }}://{{ tpl (.Values.hosts.configuration.service | toString) . }}.{{ tpl (.Values.hosts.configuration.baseHost | toString) . }}
+          {{- end }}
+          - "--sessionsPerUser"
+          - "{{ tpl (.Values.operator.sessionsPerUser | toString) . }}"
+          - "--serviceAuthToken"
+          - {{ tpl ((.Values.service.authToken | default .Values.app.id) | toString) . }}
+          {{- if .Values.hosts.usePaths }}
+          - "--instancesHost"
+          - "{{ tpl (.Values.hosts.configuration.baseHost | toString) . }}"
+          - "--usePaths"
+          - "--instancesPath"
+          - "{{ tpl (.Values.hosts.configuration.instance | toString) . }}"
+          {{- else }}
+          - "--instancesHost"
+          - "{{ tpl (.Values.hosts.configuration.instance | toString) . }}.{{ tpl (.Values.hosts.configuration.baseHost | toString) . }}"
+          {{- end }}
+          - "--storageClassName"
+          - "{{ tpl (.Values.operator.storageClassName | toString) . }}"
+          - "--requestedStorage"
+          - "{{ tpl (.Values.operator.requestedStorage | toString) . }}"
+          {{- if .Values.monitor.enable }}
+          - "--enableMonitor"
+          {{- if .Values.monitor.activityTracker.enable }}
+          - "--enableActivityTracker"
+          - "--monitorInterval"
+          - "{{ tpl (.Values.monitor.activityTracker.interval | toString) . }}"
+          {{- end }}
+          {{- end }}
+          - "--leaderLeaseDuration"
+          - "{{ tpl (.Values.operator.leaderElection.leaseDuration | toString) . }}"
+          - "--leaderRenewDeadline"
+          - "{{ tpl (.Values.operator.leaderElection.renewDeadline | toString) . }}"
+          - "--leaderRetryPeriod"
+          - "{{ tpl (.Values.operator.leaderElection.retryPeriod | toString) . }}"
+          - "--maxWatchIdleTime"
+          - "{{ tpl (.Values.operator.maxWatchIdleTime | toString) . }}"
+          {{- if .Values.operator.oAuth2ProxyVersion }}
+          - "--oAuth2ProxyVersion"
+          - "{{ tpl (.Values.operator.oAuth2ProxyVersion | toString) . }}"
+          {{- end }}
+          {{- if .Values.operator.continueOnException }}
+          - "--continueOnException"
+          {{- end }}
+         {{- if .Values.operator.enableCaching }}
+          - "--enableCaching"
+          {{- if .Values.operator.cacheUrl }}
+          - "--cacheUrl"
+          - "{{ tpl (.Values.operator.cacheUrl | toString) . }}"
+          {{- end }}
+          {{- end }}
+        {{- if .Values.operator.logging.override }}
+        volumeMounts:
+          - name: operator-logging-config
+            mountPath: /log-config/log4j2.xml
+            subPath: log4j2.xml
+        {{- end }}
+      {{- if .Values.operator.logging.override }}
+      volumes:
+        - name: operator-logging-config
+          configMap:
+            name: operator-logging-config
+      {{- end }}
+      {{- if .Values.operator.imagePullSecret }}
+      imagePullSecrets:
+        - name: {{ tpl (.Values.operator.imagePullSecret | toString) . }}
+      {{- end }}
