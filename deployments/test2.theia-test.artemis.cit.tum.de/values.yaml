@@ -56,6 +56,8 @@ theia-cloud:
     replicas: 1
     sessionsPerUser: 10
     storageClassName: csi-rbd-sc
+    enableCaching: true
+    cacheUrl: "http://theia-shared-cache:5071"
 
   # service:
   #   image: ghcr.io/ls1intum/theia/service:latest
@@ -63,7 +65,7 @@ theia-cloud:
   preloading:
     images:
       - ghcr.io/ls1intum/theia/landing-page:latest
-      - ghcr.io/ls1intum/theia/java-17:latest
+      - ghcr.io/ls1intum/theia/java-17:pr-49
       - ghcr.io/ls1intum/theia/c:latest
       - ghcr.io/ls1intum/theia/javascript:latest
       - ghcr.io/ls1intum/theia/ocaml:latest
