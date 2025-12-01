@@ -269,7 +269,7 @@ data:
               "editorMode": "code",
               "expr": "container_memory_working_set_bytes{namespace=\"$namespace\", pod=~\"session-.*\", container!=\"\", container!~\"oauth.*\", service=~\"theia-.*\"}",
               "instant": false,
-              "legendFormat": "{{pod}}",
+              "legendFormat": "{{ "{{" }}pod{{ "}}" }}",
               "range": true,
               "refId": "A"
             }
