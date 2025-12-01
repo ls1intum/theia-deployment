@@ -28,6 +28,10 @@ spec:
   downlinkLimit: {{ .downlinkLimit | default 30000 }}
   uplinkLimit: {{ .uplinkLimit | default 30000 }}
   mountPath: {{ .mountPath | default "/home/project/persisted" }}
+  options:
+    {{- if .options }}
+    {{- toYaml .options | nindent 4 }}
+    {{- end }}
   monitor:
     port: {{ (.monitor).port | default 3000 }}
     activityTracker:
