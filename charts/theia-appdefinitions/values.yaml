@@ -13,7 +13,7 @@ apps:
     minInstances: 1
     maxInstances: 1000
     options:
-      credentialBridgePort: "16281"
+      dataBridgePort: "16281"
 
   - name: c-latest
     image: ghcr.io/ls1intum/theia/c
@@ -24,7 +24,7 @@ apps:
     minInstances: 1
     maxInstances: 1000
     options:
-      credentialBridgePort: "16281"
+      dataBridgePort: "16281"
 
   - name: javascript-latest
     image: ghcr.io/ls1intum/theia/javascript
@@ -35,7 +35,7 @@ apps:
     minInstances: 1
     maxInstances: 1000
     options:
-      credentialBridgePort: "16281"
+      dataBridgePort: "16281"
 
   - name: ocaml-latest
     image: ghcr.io/ls1intum/theia/ocaml
@@ -46,7 +46,7 @@ apps:
     minInstances: 1
     maxInstances: 1000
     options:
-      credentialBridgePort: "16281"
+      dataBridgePort: "16281"
 
   - name: python-latest
     image: ghcr.io/ls1intum/theia/python
@@ -57,7 +57,7 @@ apps:
     minInstances: 1
     maxInstances: 1000
     options:
-      credentialBridgePort: "16281"
+      dataBridgePort: "16281"
 
   - name: rust-latest
     image: ghcr.io/ls1intum/theia/rust
@@ -68,4 +68,4 @@ apps:
     minInstances: 1
     maxInstances: 1000
     options:
-      credentialBridgePort: "16281"
+      dataBridgePort: "16281"
