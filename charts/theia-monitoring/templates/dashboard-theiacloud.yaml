@@ -1,11 +1,10 @@
-{{- if .Values.monitoring.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
     grafana_dashboard: "1"
   name: theia-cloud-dashboard-overview
-  namespace: {{ .Values.monitoring.dashboardNamespace }}
+  namespace: {{ .Values.dashboardNamespace }}
 data:
   theiacloud.json: |-
     {
@@ -616,4 +615,4 @@ data:
       "version": 7,
       "weekStart": ""
     }
-{{- end }}
+
