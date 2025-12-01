@@ -84,7 +84,7 @@ jobs:
           kubectl config get-contexts
           kubectl get nodes
 
-      # Step 4: Install Theia Cloud base components and CRDs
+      # Step 4: Install Theia Cloud base components, CRDs, and cluster-wide monitoring
       # These are prerequisites from the upstream Theia Cloud Helm repository
       - name: Setup Helm dependencies
         env:
@@ -103,9 +103,12 @@ jobs:
           # Install Custom Resource Definitions (CRDs) for Theia Cloud
           helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install -f ${{ vars.HELM_VALUES_PATH }}/theia-crds-helm-values.yml
 
+          # Install cluster-wide monitoring (PodMonitors + Grafana Dashboards)
+          # This is installed once per cluster, not per environment
+          helm upgrade theia-monitoring ./charts/theia-monitoring --install
+
       # Step 5: Install the main Theia Cloud application with environment-specific configuration
-      # This includes the operator, service, certificates, app definitions, and monitoring (PodMonitors + Grafana dashboards)
-      # Monitoring resources are installed into Rancher's native monitoring stack (cattle-monitoring-system + cattle-dashboards)
+      # This includes the operator, service, certificates, and app definitions
       - name: Install Theia Cloud in namespace ${{ vars.NAMESPACE }}
         env:
           KUBECONFIG: ${{ github.workspace }}/kubeconfig
