@@ -37,7 +37,7 @@ theia-cloud:
 
   operator:
     image: ghcr.io/ls1intum/theia/operator:pr-47
-    #eagerStart: false
+    #eagerStart: falsee
     replicas: 1
     sessionsPerUser: 10
     storageClassName: csi-rbd-sc
