@@ -233,7 +233,7 @@ data:
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
               "editorMode": "code",
-              "expr": "process_virtual_memory_bytes{namespace=\"$namespace\"}",
+              "expr": "container_memory_working_set_bytes{namespace=\"$namespace\"}",
               "instant": false,
               "legendFormat": "{{ "{{" }}pod{{ "}}" }}",
               "range": true,
