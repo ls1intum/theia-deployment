@@ -12,6 +12,8 @@ apps:
     limitsMemory: 2400M
     minInstances: 1
     maxInstances: 1000
+    options:
+      dataBridgePort: "16281"
 
   - name: c-latest
     image: ghcr.io/ls1intum/theia/c
@@ -21,6 +23,8 @@ apps:
     limitsMemory: 2400M
     minInstances: 1
     maxInstances: 1000
+    options:
+      dataBridgePort: "16281"
 
   - name: javascript-latest
     image: ghcr.io/ls1intum/theia/javascript
@@ -30,6 +34,8 @@ apps:
     limitsMemory: 2400M
     minInstances: 1
     maxInstances: 1000
+    options:
+      dataBridgePort: "16281"
 
   - name: ocaml-latest
     image: ghcr.io/ls1intum/theia/ocaml
@@ -39,6 +45,8 @@ apps:
     limitsMemory: 2400M
     minInstances: 1
     maxInstances: 1000
+    options:
+      dataBridgePort: "16281"
 
   - name: python-latest
     image: ghcr.io/ls1intum/theia/python
@@ -48,6 +56,8 @@ apps:
     limitsMemory: 2400M
     minInstances: 1
     maxInstances: 1000
+    options:
+      dataBridgePort: "16281"
 
   - name: rust-latest
     image: ghcr.io/ls1intum/theia/rust
@@ -57,3 +67,5 @@ apps:
     limitsMemory: 2400M
     minInstances: 1
     maxInstances: 1000
+    options:
+      dataBridgePort: "16281"
