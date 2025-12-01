@@ -1,9 +1,8 @@
-{{- if .Values.monitoring.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   name: theia-cloud-sessions
-  namespace: {{ .Values.monitoring.namespace }}
+  namespace: {{ .Values.namespace }}
 spec:
   selector:
     matchExpressions:
@@ -16,11 +15,10 @@ spec:
           - service
   namespaceSelector:
     matchNames:
-      {{- range .Values.monitoring.sessionNamespaces }}
+      {{- range .Values.sessionNamespaces }}
       - {{ . }}
       {{- end }}
   podMetricsEndpoints:
     - port: application
       interval: 15s
-{{- end }}
 
