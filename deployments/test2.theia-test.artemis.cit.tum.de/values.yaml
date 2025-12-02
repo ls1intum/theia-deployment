@@ -65,7 +65,7 @@ theia-cloud:
   preloading:
     images:
       - ghcr.io/ls1intum/theia/landing-page:latest
-      - ghcr.io/ls1intum/theia/java-17:48-add-gradle-to-java-blueprint
+      - ghcr.io/ls1intum/theia/java-17:latest
       - ghcr.io/ls1intum/theia/c:latest
       - ghcr.io/ls1intum/theia/javascript:latest
       - ghcr.io/ls1intum/theia/ocaml:latest

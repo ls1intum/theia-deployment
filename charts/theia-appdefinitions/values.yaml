@@ -1,6 +1,6 @@
 apps:
   - name: java-17-latest
-    image: ghcr.io/ls1intum/theia/java-17:48-add-gradle-to-java-blueprint
+    image: ghcr.io/ls1intum/theia/java-17:latest
     requestsMemory: 2000M
     requestsCpu: 500m
     limitsMemory: 2400M
