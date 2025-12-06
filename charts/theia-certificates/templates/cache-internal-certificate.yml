@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cache-internal-cert
+spec:
+  secretName: cache-internal-cert-secret
+  issuerRef:
+    name: theia-cloud-selfsigned-issuer
+    kind: ClusterIssuer
+  commonName: "theia-shared-cache"
+  dnsNames:
+    - theia-shared-cache
+    - theia-shared-cache.theia-cloud.svc.cluster.local
+  privateKey:
+    rotationPolicy: never

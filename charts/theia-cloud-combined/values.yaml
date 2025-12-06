@@ -15,6 +15,9 @@ theia-shared-cache:
     storageClass: csi-rbd-sc
   ui:
     enabled: true
+  tls:
+    enabled: true
+    secretName: cache-internal-cert-secret
   hosts:
     configuration: *hostsConfig
 
@@ -54,7 +57,7 @@ theia-cloud:
     sessionsPerUser: 10
     storageClassName: csi-rbd-sc
     enableCaching: true
-    cacheUrl: "http://theia-shared-cache:5071"
+    cacheUrl: "https://theia-shared-cache:5071"
 
   service:
     image: theiacloud/theia-cloud-service:1.1.0-next
