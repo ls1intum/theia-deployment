@@ -44,6 +44,8 @@ theia-cloud:
 
   service:
     image: ghcr.io/ls1intum/theia/service:latest
+    # Public token (must match app.id or be set explicitly)
+    authToken: nJV3nKZmpxTD4wu2 
 
   preloading:
     images:
