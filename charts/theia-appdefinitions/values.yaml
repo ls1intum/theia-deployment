@@ -13,6 +13,7 @@ apps:
     minInstances: 1
     maxInstances: 1000
     options:
+      dataBridgeEnabled: false
       dataBridgePort: "16281"
 
   - name: c-latest
@@ -24,6 +25,7 @@ apps:
     minInstances: 1
     maxInstances: 1000
     options:
+      dataBridgeEnabled: false
       dataBridgePort: "16281"
 
   - name: javascript-latest
@@ -35,6 +37,7 @@ apps:
     minInstances: 1
     maxInstances: 1000
     options:
+      dataBridgeEnabled: false
       dataBridgePort: "16281"
 
   - name: ocaml-latest
@@ -46,6 +49,7 @@ apps:
     minInstances: 1
     maxInstances: 1000
     options:
+      dataBridgeEnabled: false
       dataBridgePort: "16281"
 
   - name: python-latest
@@ -57,6 +61,7 @@ apps:
     minInstances: 1
     maxInstances: 1000
     options:
+      dataBridgeEnabled: false
       dataBridgePort: "16281"
 
   - name: rust-latest
@@ -68,4 +73,5 @@ apps:
     minInstances: 1
     maxInstances: 1000
     options:
+      dataBridgeEnabled: false
       dataBridgePort: "16281"
