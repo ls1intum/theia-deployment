@@ -135,7 +135,7 @@ theia-workspace-garbage-collector:
     name: garbage-collector-sa
 
   env:
-    # The time to live of a workspace. The Default is 2 weeks
+    # The time to live of a workspace. The default is 2 weeks
     WORKSPACE_TTL: "1209600s"
     # The interval at which to check for old workspaces. The Default is 30 minutes
     CHECK_INTERVAL: "1800s"
