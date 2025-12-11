@@ -37,4 +37,16 @@ spec:
     activityTracker:
       timeoutAfter: {{ ((.monitor).activityTracker).timeoutAfter | default 20 }}
       notifyAfter: {{ ((.monitor).activityTracker).notifyAfter | default 15 }}
+  timeout: {{ .timeout | default 60 }}
+  monitor:
+    port: {{ (.monitor).port | default 3000 }}
+    activityTracker:
+      timeoutAfter: {{ ((.monitor).activityTracker).timeoutAfter | default 60 }}
+      notifyAfter: {{ ((.monitor).activityTracker).notifyAfter | default 55 }}
+  {{- if .options }}
+  options:
+    {{- range $key, $value := .options }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
 {{- end }}
