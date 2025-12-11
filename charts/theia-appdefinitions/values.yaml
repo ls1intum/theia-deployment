@@ -10,8 +10,8 @@ apps:
     requestsMemory: 2000M
     requestsCpu: 500m
     limitsMemory: 3000M
-    minInstances: 1
-    maxInstances: 1000
+    minInstances: 2
+    maxInstances: 10
     options:
       dataBridgeEnabled: "false"
       dataBridgePort: "16281"
@@ -22,8 +22,8 @@ apps:
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
-    minInstances: 1
-    maxInstances: 1000
+    minInstances: 0
+    maxInstances: 10
     options:
       dataBridgeEnabled: "false"
       dataBridgePort: "16281"
@@ -34,8 +34,8 @@ apps:
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
-    minInstances: 1
-    maxInstances: 1000
+    minInstances: 2
+    maxInstances: 10
     options:
       dataBridgeEnabled: "false"
       dataBridgePort: "16281"
@@ -46,8 +46,8 @@ apps:
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
-    minInstances: 1
-    maxInstances: 1000
+    minInstances: 0
+    maxInstances: 10
     options:
       dataBridgeEnabled: "false"
       dataBridgePort: "16281"
@@ -58,8 +58,8 @@ apps:
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
-    minInstances: 1
-    maxInstances: 1000
+    minInstances: 0
+    maxInstances: 10
     options:
       dataBridgeEnabled: "false"
       dataBridgePort: "16281"
@@ -70,8 +70,8 @@ apps:
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
-    minInstances: 1
-    maxInstances: 1000
+    minInstances: 0
+    maxInstances: 10
     options:
       dataBridgeEnabled: "false"
       dataBridgePort: "16281"
