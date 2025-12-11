@@ -18,7 +18,7 @@ spec:
     {{- else }}
     - "*.webview."
     {{- end }}
-  minInstances: {{ .minInstances | default 3 }}
+  minInstances: {{ if hasKey . "minInstances" }}{{ .minInstances }}{{ else }}3{{ end }}
   maxInstances: {{ .maxInstances | default 10 }}
   requestsMemory: {{ .requestsMemory | default "1000M" }}
   requestsCpu: {{ .requestsCpu | default "100m" }}
