@@ -1077,11 +1077,7 @@ data:
       "templating": {
         "list": [
           {
-            "current": {
-              "selected": false,
-              "text": "test1",
-              "value": "test1"
-            },
+            "current": { "selected": false, "text": "theia", "value": "theia" },
             "hide": 0,
             "includeAll": false,
             "label": "Namespace",
@@ -1120,10 +1116,8 @@ data:
           }
         ]
       },
-      "time": {
-        "from": "now-15m",
-        "to": "now"
-      },
+      "time": { "from": "now-3h", "to": "now" },
+      "timeRangeUpdatedDuringEditOrView": false,
       "timepicker": {},
       "timezone": "browser",
       "title": "Theia Cloud",
