@@ -9,7 +9,7 @@ apps:
     # imageTag: latest  # Optional: override defaultImageTag for this app
     requestsMemory: 2000M
     requestsCpu: 500m
-    limitsMemory: 2400M
+    limitsMemory: 3000M
     minInstances: 1
     maxInstances: 1000
     options:
