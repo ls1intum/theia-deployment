@@ -36,8 +36,6 @@ spec:
       notifyAfter: {{ ((.monitor).activityTracker).notifyAfter | default 55 }}
   {{- if .options }}
   options:
-    {{- range $key, $value := .options }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
+    {{- toYaml .options | nindent 4 }}
   {{- end }}
 {{- end }}
