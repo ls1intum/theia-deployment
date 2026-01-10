@@ -36,11 +36,16 @@ theia-cloud:
       interval: 3
 
   operator:
-    #image: ghcr.io/ls1intum/theia/operator:latest
+    image: ghcr.io/ls1intum/theia/operator:ext-ls-poc
     #eagerStart: false
     replicas: 1
     sessionsPerUser: 10
     storageClassName: csi-rbd-sc
+    resources:
+      requests:
+        ephemeral-storage: "128Mi"
+      limits:
+        ephemeral-storage: "256Mi"
 
   # service:
   #   image: ghcr.io/ls1intum/theia/service:latest
@@ -54,6 +59,8 @@ theia-cloud:
       - ghcr.io/ls1intum/theia/ocaml:latest
       - ghcr.io/ls1intum/theia/rust:latest
       - ghcr.io/ls1intum/theia/python:latest
+      - ghcr.io/ls1intum/theia/theia-no-ls:pr-46
+      - ghcr.io/ls1intum/theia/langserver-java:pr-46
 
   imagePullPolicy: Always
 
@@ -81,6 +88,8 @@ theia-cloud:
         label: Python
       rust-latest:
         label: Rust
+      java-ls-test:
+        label: Java LS Test
     infoTitle: "🚀 Welcome to Test3 IDE Environment"
     infoText: "This is a testing environment for Theia Cloud. Select your programming language and start coding in seconds!"
     loadingText: "⚡ Setting up your development workspace..."
@@ -99,6 +108,8 @@ theia-cloud:
         text: "About"
         url: "https://aet.cit.tum.de/"
 
+  logoFileExtension: "png"
+
   keycloak:
     enable: true
 
@@ -110,3 +121,17 @@ theia-cloud:
 
     # -- The client-id. Only has to be specified when enable: true
     clientId: "theia-test"
+
+theia-appdefinitions:
+  apps:
+    - name: java-ls-test
+      image: ghcr.io/ls1intum/theia/theia-no-ls
+      imageTag: pr-46
+      options:
+        langserver-image: ghcr.io/ls1intum/theia/langserver-java:pr-46
+
+monitoring:
+  targetNamespaces:
+    - test3
+  sessionNamespaces:
+    - test3

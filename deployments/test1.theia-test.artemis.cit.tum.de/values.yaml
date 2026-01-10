@@ -39,7 +39,7 @@ theia-cloud:
     #image: ghcr.io/ls1intum/theia/operator:latest
     #eagerStart: false
     replicas: 1
-    sessionsPerUser: 10
+    sessionsPerUser: 1000 # Needed for load tests - not recommended for production
     storageClassName: csi-rbd-sc
 
   # service:
@@ -110,3 +110,9 @@ theia-cloud:
 
     # -- The client-id. Only has to be specified when enable: true
     clientId: "theia-test"
+
+monitoring:
+  targetNamespaces:
+    - test1
+  sessionNamespaces:
+    - test1

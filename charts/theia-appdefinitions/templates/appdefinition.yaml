@@ -6,7 +6,7 @@ metadata:
   name: {{ .name }}
 spec:
   name: {{ .name }}
-  image: {{ .image | default "ghcr.io/ls1intum/theia/default:latest" }}
+  image: {{ .image | default "ghcr.io/ls1intum/theia/default" }}:{{ .imageTag | default $.Values.defaultImageTag | default "latest" }}
   uid: {{ .uid | default 101 }}
   port: {{ .port | default 3000 }}
   ingressname: {{ .ingressname | default "theia-cloud-demo-ws-ingress" }}
@@ -28,9 +28,14 @@ spec:
   downlinkLimit: {{ .downlinkLimit | default 30000 }}
   uplinkLimit: {{ .uplinkLimit | default 30000 }}
   mountPath: {{ .mountPath | default "/home/project/persisted" }}
+  timeout: {{ .timeout | default 1440 }}
   monitor:
     port: {{ (.monitor).port | default 3000 }}
     activityTracker:
-      timeoutAfter: {{ ((.monitor).activityTracker).timeoutAfter | default 20 }}
-      notifyAfter: {{ ((.monitor).activityTracker).notifyAfter | default 15 }}
+      timeoutAfter: {{ ((.monitor).activityTracker).timeoutAfter | default 60 }}
+      notifyAfter: {{ ((.monitor).activityTracker).notifyAfter | default 55 }}
+  {{- if .options }}
+  options:
+    {{- toYaml .options | nindent 4 }}
+  {{- end }}
 {{- end }}

@@ -23,6 +23,14 @@ on:
           - test1
           - test2
           - test3
+      theia_cloud_tag:
+        description: 'Theia Cloud components tag (operator, service, landing-page)'
+        required: false
+        default: 'latest'
+      ide_images_tag:
+        description: 'IDE images tag (appdefinitions and preloading)'
+        required: false
+        default: 'latest'
 
 jobs:
   # Job 1: Deploy to Test1 environment
@@ -34,6 +42,8 @@ jobs:
     uses: ./.github/workflows/deploy-theia.yml
     with:
       environment: test1
+      theia_cloud_tag: ${{ inputs.theia_cloud_tag || 'latest' }}
+      ide_images_tag: ${{ inputs.ide_images_tag || 'latest' }}
     secrets: inherit
 
   # Job 2: Deploy to Test2 environment
@@ -45,6 +55,8 @@ jobs:
     uses: ./.github/workflows/deploy-theia.yml
     with:
       environment: test2
+      theia_cloud_tag: ${{ inputs.theia_cloud_tag || 'latest' }}
+      ide_images_tag: ${{ inputs.ide_images_tag || 'latest' }}
     secrets: inherit
 
   # Job 3: Deploy to Test3 environment
@@ -56,4 +68,6 @@ jobs:
     uses: ./.github/workflows/deploy-theia.yml
     with:
       environment: test3
+      theia_cloud_tag: ${{ inputs.theia_cloud_tag || 'latest' }}
+      ide_images_tag: ${{ inputs.ide_images_tag || 'latest' }}
     secrets: inherit
