@@ -74,6 +74,7 @@ theia-cloud:
     # We can define a default blueprint
     appDefinition: "java-17-latest"
     ephemeralStorage: true
+    disableInfo: false
     additionalApps:
       java-17-latest:
         label: Java 17
@@ -89,11 +90,25 @@ theia-cloud:
         label: Rust
       java-ls-test:
         label: Java LS Test
-    infoTitle: "Welcome to Theia Test 3"
-    infoText: ""
-    loadingText: "Preparing your personal Online IDE..."
+    infoTitle: "🚀 Welcome to Test3 IDE Environment"
+    infoText: "This is a testing environment for Theia Cloud. Select your programming language and start coding in seconds!"
+    loadingText: "⚡ Setting up your development workspace..."
+    footerLinks:
+      attribution:
+        text: "Built by TUM LS1 Team 👨‍💻"
+        url: "https://aet.cit.tum.de/"
+        version: "Test3-v1.0.0"
+      bugReport:
+        text: "Report a bug 🐛"
+        url: "https://github.com/ls1intum/theia-cloud/issues"
+      featureRequest:
+        text: "Request a feature ✨"
+        url: "https://github.com/ls1intum/theia-cloud/issues"
+      about:
+        text: "About"
+        url: "https://aet.cit.tum.de/"
 
-  logoFileExtension: "png"
+    logoFileExtension: "png"
 
   keycloak:
     enable: true
