@@ -36,7 +36,7 @@ theia-cloud:
       interval: 3
 
   operator:
-    image: ghcr.io/ls1intum/theia/operator:ext-ls-poc
+    image: ghcr.io/ls1intum/theia/operator:pr-47
     #eagerStart: false
     replicas: 1
     sessionsPerUser: 10
@@ -96,7 +96,7 @@ theia-cloud:
   logoFileExtension: "png"
 
   keycloak:
-    enable: true
+    enable: false
 
     # -- Key cloak auth URL. Only has to be specified when enable: true
     authUrl: "https://keycloak.ase.in.tum.de/"
