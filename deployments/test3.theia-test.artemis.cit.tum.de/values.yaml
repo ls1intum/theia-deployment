@@ -107,7 +107,6 @@ theia-cloud:
         text: "About"
         url: "https://aet.cit.tum.de/"
 
-    logoFileExtension: "png"
 
   keycloak:
     enable: true
