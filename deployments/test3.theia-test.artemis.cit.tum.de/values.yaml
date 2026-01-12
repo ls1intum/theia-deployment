@@ -92,7 +92,6 @@ theia-cloud:
     infoTitle: "🚀 Welcome to Test3 IDE Environment"
     infoText: "This is a testing environment for Theia Cloud. Select your programming language and start coding in seconds!"
     loadingText: "⚡ Setting up your development workspace..."
-    logoFileExtension: ""
     footerLinks:
       attribution:
         text: "Built by TUM LS1 Team 👨‍💻"
