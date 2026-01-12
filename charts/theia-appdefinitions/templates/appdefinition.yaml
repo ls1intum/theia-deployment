@@ -27,7 +27,7 @@ spec:
   imagePullPolicy: {{ .imagePullPolicy | default "IfNotPresent" }}
   downlinkLimit: {{ .downlinkLimit | default 30000 }}
   uplinkLimit: {{ .uplinkLimit | default 30000 }}
-  mountPath: {{ .mountPath | default "/home/project/persisted" }}
+  mountPath: {{ .mountPath | default "/home/project" }}
   timeout: {{ .timeout | default 1440 }}
   monitor:
     port: {{ (.monitor).port | default 3000 }}
