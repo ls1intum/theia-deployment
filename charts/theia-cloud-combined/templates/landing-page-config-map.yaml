@@ -91,7 +91,8 @@ data:
         {{- end }}
       },
       {{- end }}
-    };binaryData:
+    };
+binaryData:
   {{- if (index .Values "theia-cloud" "landingPage" "logoData") }}
   {{ printf "logo.%s: " $logoFileExtension }}{{ index .Values "theia-cloud" "landingPage" "logoData" }}
   {{- else }}
