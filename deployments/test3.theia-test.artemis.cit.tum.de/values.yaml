@@ -96,7 +96,7 @@ theia-cloud:
   logoFileExtension: "png"
 
   keycloak:
-    enable: false
+    enable: true
 
     # -- Key cloak auth URL. Only has to be specified when enable: true
     authUrl: "https://keycloak.ase.in.tum.de/"
