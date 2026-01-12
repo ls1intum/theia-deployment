@@ -40,12 +40,7 @@ theia-cloud:
     #eagerStart: false
     replicas: 1
     sessionsPerUser: 10
-    storageClassName: longhorn
-    resources:
-      requests:
-        ephemeral-storage: "128Mi"
-      limits:
-        ephemeral-storage: "256Mi"
+    storageClassName: csi-rbd-sc
 
   # service:
   #   image: ghcr.io/ls1intum/theia/service:latest
