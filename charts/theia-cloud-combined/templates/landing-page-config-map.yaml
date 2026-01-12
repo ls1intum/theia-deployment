@@ -1,4 +1,7 @@
-{{- $logoFileExtension :=  tpl (index .Values "theia-cloud" "landingPage" "logoFileExtension" | toString) . -}}
+{{- $logoFileExtension := "" -}}
+{{- if (index .Values "theia-cloud" "landingPage" "logoFileExtension") -}}
+{{- $logoFileExtension = tpl (index .Values "theia-cloud" "landingPage" "logoFileExtension" | toString) . -}}
+{{- end -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -31,7 +34,7 @@ data:
         },
         {{- end }}
       ],
-      {{- if (index .Values "theia-cloud" "landingPage" "logoFileExtension") }}
+      {{- if and (index .Values "theia-cloud" "landingPage" "logoFileExtension") (ne $logoFileExtension "") }}
       logoFileExtension: "{{ $logoFileExtension }}",
       {{- end }}
       disableInfo: {{ tpl (index .Values "theia-cloud" "landingPage" "disableInfo" | toString) . }},
