@@ -74,7 +74,6 @@ theia-cloud:
     # We can define a default blueprint
     appDefinition: "java-17-latest"
     ephemeralStorage: true
-    disableInfo: false
     additionalApps:
       java-17-latest:
         label: Java 17
