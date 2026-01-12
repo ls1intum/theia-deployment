@@ -31,7 +31,9 @@ data:
         },
         {{- end }}
       ],
+      {{- if (index .Values "theia-cloud" "landingPage" "logoFileExtension") }}
       logoFileExtension: "{{ $logoFileExtension }}",
+      {{- end }}
       disableInfo: {{ tpl (index .Values "theia-cloud" "landingPage" "disableInfo" | toString) . }},
       {{- if (index .Values "theia-cloud" "landingPage" "infoText") }}
       infoText: "{{ tpl (index .Values "theia-cloud" "landingPage" "infoText" | toString) . }}",

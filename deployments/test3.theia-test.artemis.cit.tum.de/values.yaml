@@ -36,7 +36,7 @@ theia-cloud:
       interval: 3
 
   operator:
-    image: ghcr.io/ls1intum/theia/operator:ext-ls-poc
+    image: ghcr.io/ls1intum/theia/operator:latest
     #eagerStart: false
     replicas: 1
     sessionsPerUser: 10
@@ -106,8 +106,6 @@ theia-cloud:
       about:
         text: "About"
         url: "https://aet.cit.tum.de/"
-
-    logoFileExtension: "png"
 
   keycloak:
     enable: true
