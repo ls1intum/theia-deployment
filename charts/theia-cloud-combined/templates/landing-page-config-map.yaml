@@ -92,11 +92,3 @@ data:
       },
       {{- end }}
     };
-binaryData:
-  {{- if (index .Values "theia-cloud" "landingPage" "logoData") }}
-  {{ printf "logo.%s: " $logoFileExtension }}{{ index .Values "theia-cloud" "landingPage" "logoData" }}
-  {{- else }}
-  {{- range $path, $bytes := .Files.Glob (printf "%s" (index .Values "theia-cloud" "landingPage" "logo"))}}
-  {{ printf "logo.%s: " $logoFileExtension }}{{ $.Files.Get $path | b64enc }}
-  {{ end }}
-  {{- end }}
