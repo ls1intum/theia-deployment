@@ -98,7 +98,7 @@ theia-cloud:
         url: "https://github.com/ls1intum/theia-cloud/issues"
       about:
         text: "About"
-        url: ""
+        url: "https://aet.cit.tum.de/"
 
   keycloak:
     enable: true
