@@ -1,7 +1,3 @@
-{{- $logoFileExtension := "" -}}
-{{- if (index .Values "theia-cloud" "landingPage" "logoFileExtension") -}}
-{{- $logoFileExtension = tpl (index .Values "theia-cloud" "landingPage" "logoFileExtension" | toString) . -}}
-{{- end -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -34,6 +30,7 @@ data:
         },
         {{- end }}
       ],
+      // We force PNG because we are forcing logo.png in the deployment
       logoFileExtension: "png",
       disableInfo: {{ tpl (index .Values "theia-cloud" "landingPage" "disableInfo" | toString) . }},
       {{- if (index .Values "theia-cloud" "landingPage" "infoText") }}
@@ -93,3 +90,9 @@ data:
       },
       {{- end }}
     };
+
+  # --- CORRECTED BLOCK ---
+  {{- if (index .Values "theia-cloud" "landingPage" "logoData") }}
+  logo.png: {{ index .Values "theia-cloud" "landingPage" "logoData" }}
+  {{- end }}
+  # -----------------------

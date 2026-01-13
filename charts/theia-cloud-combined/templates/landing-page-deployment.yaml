@@ -1,8 +1,3 @@
-{{- $logoFileExtension := "" -}}
-{{- if (index .Values "theia-cloud" "landingPage" "logoFileExtension") -}}
-{{- $logoFileExtension = tpl (index .Values "theia-cloud" "landingPage" "logoFileExtension" | toString) . -}}
-{{- end -}}
-{{- $logoFileName :=  printf "logo.%s" $logoFileExtension -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,7 +17,6 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/landing-page-config-map.yaml") . | sha256sum }}
     spec:
-      automountServiceAccountToken: false
       containers:
         - name: landing-page-container
           image: {{ tpl (index .Values "theia-cloud" "landingPage" "image" | toString) . }}
@@ -41,11 +35,16 @@ spec:
             - name: landing-page-config
               mountPath: /usr/share/nginx/html/config.js
               subPath: config.js
-            {{- if and (index .Values "theia-cloud" "landingPage" "logoData") (ne $logoFileExtension "") }}
-            - name: landing-page-config
-              mountPath: {{ printf "/usr/share/nginx/html/logo.%s" $logoFileExtension }}
-              subPath: {{ printf "logo.%s" $logoFileExtension }}
-            {{- end }}
+
+          # --- CORRECTED BLOCK ---
+          # We use 'index' because "theia-cloud" has a dash
+          {{- if (index .Values "theia-cloud" "landingPage" "logoData") }}
+          - name: landing-page-config
+            mountPath: /usr/share/nginx/html/logo.png
+            subPath: logo.png
+          {{- end }}
+          # -----------------------
+
       {{- if (index .Values "theia-cloud" "landingPage" "imagePullSecret") }}
       imagePullSecrets:
         - name: {{ tpl (index .Values "theia-cloud" "landingPage" "imagePullSecret" | toString) . }}
@@ -54,20 +53,3 @@ spec:
         - name: landing-page-config
           configMap:
             name: landing-page-config
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: landing-page-service
-  labels:
-    app: landing-page
-  namespace: {{ .Release.Namespace }}
-spec:
-  type: ClusterIP
-  selector:
-    app: landing-page
-  ports:
-    - name: http
-      protocol: TCP
-      port: 80
-      targetPort: 80
