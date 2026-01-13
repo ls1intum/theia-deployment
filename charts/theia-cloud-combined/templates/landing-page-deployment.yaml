@@ -41,10 +41,10 @@ spec:
             - name: landing-page-config
               mountPath: /usr/share/nginx/html/config.js
               subPath: config.js
-            {{- if (index .Values "theia-cloud" "landingPage" "logoData") }}
+            {{- if and (index .Values "theia-cloud" "landingPage" "logoData") (ne $logoFileExtension "") }}
             - name: landing-page-config
-              mountPath: {{ printf "/usr/share/nginx/html/%s" $logoFileName }}
-              subPath: {{ $logoFileName }}
+              mountPath: {{ printf "/usr/share/nginx/html/logo.%s" $logoFileExtension }}
+              subPath: {{ printf "logo.%s" $logoFileExtension }}
             {{- end }}
       {{- if (index .Values "theia-cloud" "landingPage" "imagePullSecret") }}
       imagePullSecrets:
