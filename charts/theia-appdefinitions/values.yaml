@@ -10,10 +10,10 @@ apps:
     requestsMemory: 2000M
     requestsCpu: 500m
     limitsMemory: 3000M
-    minInstances: 2
-    maxInstances: 10
+    minInstances: 3
+    maxInstances: 1000
     options:
-      dataBridgeEnabled: "false"
+      dataBridgeEnabled: "true"
       dataBridgePort: "16281"
 
   - name: c-latest
@@ -23,9 +23,9 @@ apps:
     requestsCpu: 200m
     limitsMemory: 2400M
     minInstances: 0
-    maxInstances: 10
+    maxInstances: 1000
     options:
-      dataBridgeEnabled: "false"
+      dataBridgeEnabled: "true"
       dataBridgePort: "16281"
 
   - name: javascript-latest
@@ -34,10 +34,10 @@ apps:
     requestsMemory: 100M
     requestsCpu: 200m
     limitsMemory: 2400M
-    minInstances: 2
-    maxInstances: 10
+    minInstances: 0
+    maxInstances: 1000
     options:
-      dataBridgeEnabled: "false"
+      dataBridgeEnabled: "true"
       dataBridgePort: "16281"
 
   - name: ocaml-latest
@@ -47,9 +47,9 @@ apps:
     requestsCpu: 200m
     limitsMemory: 2400M
     minInstances: 0
-    maxInstances: 10
+    maxInstances: 1000
     options:
-      dataBridgeEnabled: "false"
+      dataBridgeEnabled: "true"
       dataBridgePort: "16281"
 
   - name: python-latest
@@ -59,9 +59,9 @@ apps:
     requestsCpu: 200m
     limitsMemory: 2400M
     minInstances: 0
-    maxInstances: 10
+    maxInstances: 1000
     options:
-      dataBridgeEnabled: "false"
+      dataBridgeEnabled: "true"
       dataBridgePort: "16281"
 
   - name: rust-latest
@@ -71,7 +71,7 @@ apps:
     requestsCpu: 200m
     limitsMemory: 2400M
     minInstances: 0
-    maxInstances: 10
+    maxInstances: 1000
     options:
-      dataBridgeEnabled: "false"
+      dataBridgeEnabled: "true"
       dataBridgePort: "16281"
