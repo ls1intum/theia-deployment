@@ -31,6 +31,10 @@ on:
         description: 'IDE images tag (appdefinitions and preloading)'
         required: false
         default: 'latest'
+      helm_chart_branch:
+        description: 'Branch of theia-cloud-helm to use (leave empty for default)'
+        required: false
+        default: ''
 
 jobs:
   # Job 1: Deploy to Test1 environment
@@ -44,6 +48,7 @@ jobs:
       environment: test1
       theia_cloud_tag: ${{ inputs.theia_cloud_tag || 'latest' }}
       ide_images_tag: ${{ inputs.ide_images_tag || 'latest' }}
+      helm_chart_branch: ${{ inputs.helm_chart_branch || '' }}
     secrets: inherit
 
   # Job 2: Deploy to Test2 environment
@@ -57,6 +62,7 @@ jobs:
       environment: test2
       theia_cloud_tag: ${{ inputs.theia_cloud_tag || 'latest' }}
       ide_images_tag: ${{ inputs.ide_images_tag || 'latest' }}
+      helm_chart_branch: ${{ inputs.helm_chart_branch || '' }}
     secrets: inherit
 
   # Job 3: Deploy to Test3 environment
@@ -70,4 +76,5 @@ jobs:
       environment: test3
       theia_cloud_tag: ${{ inputs.theia_cloud_tag || 'latest' }}
       ide_images_tag: ${{ inputs.ide_images_tag || 'latest' }}
+      helm_chart_branch: ${{ inputs.helm_chart_branch || '' }}
     secrets: inherit
