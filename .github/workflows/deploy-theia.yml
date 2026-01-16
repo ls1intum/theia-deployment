@@ -50,6 +50,11 @@ on:
         required: false
         type: string
         default: "latest"
+      helm_chart_branch:
+        description: "Branch of theia-cloud-helm to use (leave empty for main/published)"
+        required: false
+        type: string
+        default: ""
 
 jobs:
   helm-install:
@@ -83,6 +88,29 @@ jobs:
           # Verify connection to cluster
           kubectl config get-contexts
           kubectl get nodes
+
+      # Step 3.5: Checkout upstream Helm chart branch if specified
+      - name: Checkout Upstream Helm Branch
+        if: inputs.helm_chart_branch != ''
+        uses: actions/checkout@v4
+        with:
+          repository: ls1intum/theia-cloud-helm
+          ref: ${{ inputs.helm_chart_branch }}
+          path: upstream-helm
+
+      # Step 3.6: Patch Chart.yaml to use local upstream chart
+      - name: Patch Chart.yaml
+        if: inputs.helm_chart_branch != ''
+        run: |
+          echo "Patching Chart.yaml to use local upstream chart from branch: ${{ inputs.helm_chart_branch }}"
+          sed -i 's|repository: "https://ls1intum.github.io/theia-cloud-helm"|repository: "file://../../upstream-helm/charts/theia-cloud"|' ./charts/theia-cloud-combined/Chart.yaml
+          sed -i 's|repository: "https://eclipse-theia.github.io/theia-cloud-helm/"|repository: "file://../../upstream-helm/charts/theia-cloud"|' ./charts/theia-cloud-combined/Chart.yaml
+          # Also handle cases where it might use the other URL format if applicable, or generic regex
+          # Using a more generic regex to catch the upstream repo URL
+          sed -i 's|repository: "https://.*theia-cloud-helm.*"|repository: "file://../../upstream-helm/charts/theia-cloud"|' ./charts/theia-cloud-combined/Chart.yaml
+          
+          echo "Patched Chart.yaml content:"
+          cat ./charts/theia-cloud-combined/Chart.yaml
 
       # Step 4: Install Theia Cloud base components, CRDs, and cluster-wide monitoring
       # These are prerequisites from the upstream Theia Cloud Helm repository
