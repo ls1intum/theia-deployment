@@ -107,13 +107,17 @@ jobs:
           # Remove Chart.lock to force fresh dependency resolution
           rm -f ./charts/theia-cloud-combined/Chart.lock
           
+          # Get the version from the local upstream chart
+          UPSTREAM_VERSION=$(grep '^version:' ./upstream-helm/charts/theia-cloud/Chart.yaml | head -1 | awk '{print $2}')
+          echo "Detected upstream chart version: $UPSTREAM_VERSION"
+          
           # Patch the repository URL to use local file path
           sed -i 's|repository: "https://ls1intum.github.io/theia-cloud-helm"|repository: "file://../../upstream-helm/charts/theia-cloud"|' ./charts/theia-cloud-combined/Chart.yaml
           sed -i 's|repository: "https://eclipse-theia.github.io/theia-cloud-helm/"|repository: "file://../../upstream-helm/charts/theia-cloud"|' ./charts/theia-cloud-combined/Chart.yaml
           sed -i 's|repository: "https://eclipse-theia.github.io/theia-cloud-helm"|repository: "file://../../upstream-helm/charts/theia-cloud"|' ./charts/theia-cloud-combined/Chart.yaml
           
-          # Patch the version to use wildcard since local charts may have different versions
-          sed -i '/name: theia-cloud/{n;s/version: .*/version: "*"/}' ./charts/theia-cloud-combined/Chart.yaml
+          # Patch the version to match the local chart's version exactly
+          sed -i "/name: theia-cloud/{n;s/version: .*/version: $UPSTREAM_VERSION/}" ./charts/theia-cloud-combined/Chart.yaml
           
           echo "Patched Chart.yaml content:"
           cat ./charts/theia-cloud-combined/Chart.yaml
