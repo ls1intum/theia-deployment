@@ -80,6 +80,8 @@ theia-cloud:
     # 2. (Optional) If you removed the 'hardcoded png' logic in the template, 
     # you might need this. If you used my simplified template, this is ignored.
     logoFileExtension: "png"
+    # Disable default logo mount (we use the hardcoded one in the image)
+    logo: null
     appDefinition: "java-17-latest"
     ephemeralStorage: true
     additionalApps:
