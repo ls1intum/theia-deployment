@@ -42,7 +42,7 @@ theia-cloud:
     clusterIssuer: letsencrypt-prod
     certManagerAnnotations: false
     instances:
-      allWildcardSecretNames: {"*.webview.": static-theia-cert}
+      allWildcardSecretNames: { "*.webview.": static-theia-cert }
 
   monitor:
     enable: true
@@ -65,7 +65,7 @@ theia-cloud:
   preloading:
     images:
       - ghcr.io/ls1intum/theia/landing-page:latest
-      - ghcr.io/ls1intum/theia/java-17:pr-50
+      - ghcr.io/ls1intum/theia/java-17:latest
       - ghcr.io/ls1intum/theia/c:latest
       - ghcr.io/ls1intum/theia/javascript:latest
       - ghcr.io/ls1intum/theia/ocaml:latest
@@ -115,3 +115,9 @@ theia-cloud:
 
     # -- The client-id. Only has to be specified when enable: true
     clientId: "theia-test"
+
+monitoring:
+  targetNamespaces:
+    - test2
+  sessionNamespaces:
+    - test2

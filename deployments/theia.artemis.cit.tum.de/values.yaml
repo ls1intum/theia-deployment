@@ -96,5 +96,11 @@ theia-cloud:
     # # -- The Keycloak Realm. Only has to be specified when enable: true
     realm: "tum"
 
-    # # -- The client-id. Only has to be specified when enable: true
+    #     # -- The client-id. Only has to be specified when enable: true
     clientId: "theia"
+
+monitoring:
+  targetNamespaces:
+    - theia
+  sessionNamespaces:
+    - theia

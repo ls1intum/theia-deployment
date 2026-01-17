@@ -60,7 +60,7 @@ theia-cloud:
     cacheUrl: "https://theia-shared-cache:5071"
 
   service:
-    image: theiacloud/theia-cloud-service:1.1.0-next
+    image: ghcr.io/ls1intum/theia/service:latest
 
   preloading:
     images:
@@ -80,7 +80,7 @@ theia-cloud:
 
   landingPage:
     # We use the try now page as landing page since the default does not support mutliple apps -> https://github.com/eclipsesource/theia-cloud/discussions/301
-    image: ghcr.io/ls1intum/theia/landing-page
+    image: ghcr.io/ls1intum/theia/landing-page:latest
     # We can define a default blueprint
     appDefinition: "java-17-latest"
     ephemeralStorage: false
@@ -127,3 +127,17 @@ theia-cloud:
     # See https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview/
     # for how to generate a strong cookie secret.
     cookieSecret: "placeholder"
+
+# Configure the theia-appdefinitions subchart
+theia-appdefinitions:
+  # Default image tag for all app definitions (can be overridden per app)
+  defaultImageTag: latest
+  # Individual apps can override the tag in their definition, e.g.:
+  # apps:
+  #   - name: java-17-v1
+  #     image: ghcr.io/ls1intum/theia/java-17
+  #     imageTag: v1.0.0
+  #   - name: python-v2
+  #     image: ghcr.io/ls1intum/theia/python
+  #     imageTag: v2.0.0
+
