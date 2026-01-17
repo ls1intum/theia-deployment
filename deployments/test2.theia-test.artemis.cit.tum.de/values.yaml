@@ -16,11 +16,12 @@ theia-shared-cache:
 
   image:
     repository: ghcr.io/ls1intum/theia-shared-cache/gradle-cache
-    tag: "latest"
+    tag: "main"
     pullPolicy: IfNotPresent
 
   auth:
-    enabled: false
+    username: "gradle"
+    password: "gradle"
 
   storage:
     size: 50Gi
