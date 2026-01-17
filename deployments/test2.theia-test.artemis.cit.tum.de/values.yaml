@@ -13,17 +13,37 @@ theia-certificates:
 
 theia-shared-cache:
   enabled: true
-  ui:
-    enabled: true
-  hosts:
-    configuration: *hostsConfig
+
+  image:
+    repository: ghcr.io/ls1intum/theia-shared-cache/gradle-cache
+    tag: "latest"
+    pullPolicy: IfNotPresent
+
+  auth:
+    username: "gradle"
+    password: "gradle"
+
+  storage:
+    size: 50Gi
+    storageClass: "csi-rbd-sc"
+    
   resources:
-    requests:
-      memory: "1Gi"
-      cpu: 0.5
-    limits:
-      memory: "10Gi"
-      cpu: 1.5
+    cacheServer:
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+      limits:
+        memory: "1Gi"
+        cpu: "500m"
+
+    minio:
+      requests:
+        memory: "512Mi"
+        cpu: "250m"
+      limits:
+        memory: "2Gi"
+        cpu: "1000m"
+
 
 theia-cloud:
   app:
@@ -57,7 +77,7 @@ theia-cloud:
     sessionsPerUser: 10
     storageClassName: csi-rbd-sc
     enableCaching: true
-    cacheUrl: "https://theia-shared-cache:5071"
+    cacheUrl: "https://theia-shared-cache:8080"
 
   # service:
   #   image: ghcr.io/ls1intum/theia/service:latest

@@ -8,18 +8,7 @@ hosts:
     cache: cache.theia
 
 theia-shared-cache:
-  enabled: true
-  replicas: 1
-  persistence:
-    size: 10Gi
-    storageClass: csi-rbd-sc
-  ui:
-    enabled: true
-  tls:
-    enabled: true
-    secretName: cache-internal-cert-secret
-  hosts:
-    configuration: *hostsConfig
+  enabled: false
 
 theia-certificates:
   hosts:
@@ -56,8 +45,7 @@ theia-cloud:
     replicas: 1
     sessionsPerUser: 10
     storageClassName: csi-rbd-sc
-    enableCaching: true
-    cacheUrl: "https://theia-shared-cache:5071"
+    enableCaching: false
 
   service:
     image: ghcr.io/ls1intum/theia/service:latest
