@@ -36,7 +36,7 @@ theia-cloud:
       interval: 3
 
   operator:
-    image: ghcr.io/ls1intum/theia/operator:ext-ls-poc
+    image: ghcr.io/ls1intum/theia/operator:latest
     #eagerStart: false
     replicas: 1
     sessionsPerUser: 10
@@ -72,6 +72,14 @@ theia-cloud:
     # We use the try now page as landing page since the default does not support mutliple apps -> https://github.com/eclipsesource/theia-cloud/discussions/301
     image: ghcr.io/ls1intum/theia/landing-page
     # We can define a default blueprint
+    
+    # 1. The actual image data (Must be a Base64 encoded string)
+    # You can get this by running: cat my-logo.png | base64 | pbcopy
+    #logoData: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFhAJ/wlseKgAAAABJRU5ErkJggg=="
+    
+    # 2. (Optional) If you removed the 'hardcoded png' logic in the template, 
+    # you might need this. If you used my simplified template, this is ignored.
+    logoFileExtension: "png"
     appDefinition: "java-17-latest"
     ephemeralStorage: true
     additionalApps:
@@ -106,8 +114,6 @@ theia-cloud:
       about:
         text: "About"
         url: "https://aet.cit.tum.de/"
-
-    logoFileExtension: "png"
 
   keycloak:
     enable: true
