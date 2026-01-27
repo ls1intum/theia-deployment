@@ -142,14 +142,14 @@ jobs:
           helm dependency update ./charts/theia-cloud-combined
 
           # Install base components (operator base, metrics, etc.)
-          helm upgrade theia-cloud-base theia-cloud-repo/theia-cloud-base --install -f ${{ vars.HELM_VALUES_PATH }}/theia-base-helm-values.yml
+          helm upgrade theia-cloud-base theia-cloud-repo/theia-cloud-base --install -n default -f ${{ vars.HELM_VALUES_PATH }}/theia-base-helm-values.yml
 
           # Install Custom Resource Definitions (CRDs) for Theia Cloud
-          helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install -f ${{ vars.HELM_VALUES_PATH }}/theia-crds-helm-values.yml
+          helm upgrade theia-cloud-crds theia-cloud-repo/theia-cloud-crds --install -n default -f ${{ vars.HELM_VALUES_PATH }}/theia-crds-helm-values.yml
 
           # Install cluster-wide monitoring (PodMonitors + Grafana Dashboards)
           # This is installed once per cluster, not per environment
-          helm upgrade theia-monitoring ./charts/theia-monitoring --install
+          helm upgrade theia-monitoring ./charts/theia-monitoring --install -n default
 
       # Step 5: Install the main Theia Cloud application with environment-specific configuration
       # This includes the operator, service, certificates, and app definitions
