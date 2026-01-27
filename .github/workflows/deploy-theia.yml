@@ -76,6 +76,12 @@ jobs:
         with:
           version: v3.14.0
 
+      # Step 2.5: Install kubectl (not pre-installed on self-hosted runners)
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'latest'
+
       # Step 3: Configure kubectl to connect to the target Kubernetes cluster
       # The KUBECONFIG secret contains the cluster connection configuration
       - name: Setup Kubeconfig
