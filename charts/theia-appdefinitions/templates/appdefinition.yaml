@@ -4,6 +4,8 @@ apiVersion: theia.cloud/v1beta10
 kind: AppDefinition
 metadata:
   name: {{ .name }}
+  annotations:
+    helm.sh/revision: {{ $.Release.Revision | quote }}
 spec:
   name: {{ .name }}
   image: {{ .image | default "ghcr.io/ls1intum/theia/default" }}:{{ .imageTag | default $.Values.defaultImageTag | default "latest" }}
