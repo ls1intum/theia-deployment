@@ -52,13 +52,7 @@ theia-cloud:
 
   preloading:
     images:
-      - ghcr.io/ls1intum/theia/landing-page:latest
-      - ghcr.io/ls1intum/theia/java-17:latest
-      - ghcr.io/ls1intum/theia/c:latest
-      - ghcr.io/ls1intum/theia/javascript:latest
-      - ghcr.io/ls1intum/theia/ocaml:latest
-      - ghcr.io/ls1intum/theia/rust:latest
-      - ghcr.io/ls1intum/theia/python:latest
+      - ghcr.io/ls1intum/theia/landing-page:pr-70
       - ghcr.io/ls1intum/theia/theia-no-ls:pr-80
       - ghcr.io/ls1intum/theia/langserver-java:pr-80
 
@@ -84,9 +78,9 @@ theia-cloud:
     ephemeralStorage: true
     additionalApps:
       java-ls-test:
-        label: Java with External Language Server (PR #80 Test)
+        label: Java
     infoTitle: "🚀 Welcome to Test3 IDE Environment"
-    infoText: "This is a testing environment for Theia Cloud. Select your programming language and start coding in seconds!"
+    infoText: "Test environment for Theia with external language server architecture (PR #70 & #80). The IDE runs separately from the language server for improved performance and modularity."
     loadingText: "⚡ Setting up your development workspace..."
     footerLinks:
       attribution:
