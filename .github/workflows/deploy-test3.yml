@@ -1,0 +1,42 @@
+# ==============================================================================
+# Test3 Manual Deployment Workflow
+# ==============================================================================
+# This workflow handles manual deployments to the test3 environment with no
+# input parameters required - it uses the values file directly from the branch.
+#
+# Purpose:
+#   - Quick manual deployment to test3 for testing and experimentation
+#   - Uses values file from current branch without any inputs
+#   - Ideal for testing configuration changes before merging
+#
+# Trigger:
+#   Manual only - via "Run workflow" button in GitHub Actions UI
+#
+# Target:
+#   - Environment: test3
+#   - Namespace: test3-theia (configured via NAMESPACE environment variable)
+#
+# Usage:
+#   1. Navigate to Actions > Deploy Test3
+#   2. Select the branch to deploy from (e.g., LSP-config, main)
+#   3. Click "Run workflow"
+#   4. Deployment will use the values.yaml from the selected branch
+#
+# Note:
+#   This workflow is designed for rapid iteration - it takes no inputs and
+#   deploys whatever configuration is in the values.yaml file on the branch.
+# ==============================================================================
+
+name: Deploy Test3
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Test3
+    # Environment variables NAMESPACE and HELM_VALUES_PATH are read from GitHub Environment settings
+    uses: ./.github/workflows/deploy-theia.yml
+    with:
+      environment: test3
+    secrets: inherit
