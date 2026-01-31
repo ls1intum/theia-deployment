@@ -40,7 +40,7 @@ theia-cloud:
     #eagerStart: false
     replicas: 1
     sessionsPerUser: 10
-    storageClassName: csi-rbd-sc
+    storageClassName: longhorn
     resources:
       requests:
         ephemeral-storage: "128Mi"
@@ -80,23 +80,11 @@ theia-cloud:
     # 2. (Optional) If you removed the 'hardcoded png' logic in the template, 
     # you might need this. If you used my simplified template, this is ignored.
     logoFileExtension: "png"
-    appDefinition: "java-17-latest"
+    appDefinition: "java-ls-test"
     ephemeralStorage: true
     additionalApps:
-      java-17-latest:
-        label: Java 17
-      c-latest:
-        label: C
-      javascript-latest:
-        label: Javascript
-      ocaml-latest:
-        label: Ocaml
-      python-latest:
-        label: Python
-      rust-latest:
-        label: Rust
       java-ls-test:
-        label: Java LS Test
+        label: Java with External Language Server (PR #80 Test)
     infoTitle: "🚀 Welcome to Test3 IDE Environment"
     infoText: "This is a testing environment for Theia Cloud. Select your programming language and start coding in seconds!"
     loadingText: "⚡ Setting up your development workspace..."
