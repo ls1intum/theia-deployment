@@ -36,7 +36,7 @@ theia-cloud:
       interval: 3
 
   operator:
-    image: ghcr.io/ls1intum/theia/operator:latest
+    image: ghcr.io/ls1intum/theia/operator:pr-70
     #eagerStart: false
     replicas: 1
     sessionsPerUser: 10
@@ -47,8 +47,8 @@ theia-cloud:
       limits:
         ephemeral-storage: "256Mi"
 
-  # service:
-  #   image: ghcr.io/ls1intum/theia/service:latest
+  service:
+    image: ghcr.io/ls1intum/theia/service:pr-70
 
   preloading:
     images:
@@ -59,8 +59,8 @@ theia-cloud:
       - ghcr.io/ls1intum/theia/ocaml:latest
       - ghcr.io/ls1intum/theia/rust:latest
       - ghcr.io/ls1intum/theia/python:latest
-      - ghcr.io/ls1intum/theia/theia-no-ls:pr-46
-      - ghcr.io/ls1intum/theia/langserver-java:pr-46
+      - ghcr.io/ls1intum/theia/theia-no-ls:pr-80
+      - ghcr.io/ls1intum/theia/langserver-java:pr-80
 
   imagePullPolicy: Always
 
@@ -131,9 +131,9 @@ theia-appdefinitions:
   apps:
     - name: java-ls-test
       image: ghcr.io/ls1intum/theia/theia-no-ls
-      imageTag: pr-46
+      imageTag: pr-80
       options:
-        langserver-image: ghcr.io/ls1intum/theia/langserver-java:pr-46
+        langserver-image: ghcr.io/ls1intum/theia/langserver-java:pr-80
 
 monitoring:
   targetNamespaces:
